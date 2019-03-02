@@ -2,7 +2,7 @@
 
 import React, { Component } from 'react';
 
-import {StyleSheet} from 'react-native';
+import {StyleSheet, NativeModules} from 'react-native';
 
 import {
   ViroARScene,
@@ -41,6 +41,7 @@ export default class HelloWorldSceneAR extends Component {
       this.setState({
         text : "Hello World!"
       });
+        NativeModules.Conductor.setup();
     } else if (state == ViroConstants.TRACKING_NONE) {
       // Handle loss of tracking
     }

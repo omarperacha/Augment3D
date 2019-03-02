@@ -1,4 +1,10 @@
 PODS:
+  - AudioKit (4.6.1):
+    - AudioKit/Core (= 4.6.1)
+    - AudioKit/UI (= 4.6.1)
+  - AudioKit/Core (4.6.1)
+  - AudioKit/UI (4.6.1):
+    - AudioKit/Core
   - AWSCore (2.6.7)
   - AWSDynamoDB (2.6.7):
     - AWSCore (= 2.6.7)
@@ -17,11 +23,13 @@ PODS:
   - ViroReact (1.0)
 
 DEPENDENCIES:
+  - AudioKit
   - ViroKit (from `../node_modules/react-viro/ios/dist/ViroRenderer/`)
   - ViroReact (from `../node_modules/react-viro/ios/`)
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
+    - AudioKit
     - AWSCore
     - AWSDynamoDB
     - GoogleToolboxForMac
@@ -36,6 +44,7 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-viro/ios/"
 
 SPEC CHECKSUMS:
+  AudioKit: 76f8f5dbed135967b91b6cc6aa970e3d30226134
   AWSCore: a5ff5fb202342b922eb9036af9ecc3bc28a032eb
   AWSDynamoDB: ea3631a84c0c4a19ef4cb4ec32d3348d3ae9d47c
   GoogleToolboxForMac: 2b2596cbb7186865e98cadf2b1e262d851c2b168
@@ -45,6 +54,6 @@ SPEC CHECKSUMS:
   ViroKit: b59a8004b4a180fe255356b9d0388173dff0fbdf
   ViroReact: 5520f26ac4654e361786c82da3b29ce0402c3c00
 
-PODFILE CHECKSUM: 3a506abefa60c672e14aebb5b4c44d58c27d1b0f
+PODFILE CHECKSUM: 225977664f024d43f378d832cbab451a7759d9e9
 
 COCOAPODS: 1.5.3

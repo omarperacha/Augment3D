@@ -19,6 +19,7 @@
 {
   BOOL enterVrImmediately = YES;
   BOOL usingNgrok = YES;
+  NSDictionary *props = @{@"distance0" : @100.0};
 
   if(enterVrImmediately) {
     NSURL *jsCodeLocation = nil;
@@ -34,7 +35,7 @@
 
     RCTRootView *rootView = [[RCTRootView alloc] initWithBundleURL:jsCodeLocation
                                                       moduleName:@"Augment3d"
-                                               initialProperties:nil
+                                               initialProperties:props
                                                    launchOptions:launchOptions];
     rootView.backgroundColor = [[UIColor alloc] initWithRed:1.0f green:1.0f blue:1.0f alpha:1];
 
