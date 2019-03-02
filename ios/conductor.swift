@@ -14,13 +14,17 @@ class Conductor: NSObject {
   
   private var osc0 = AKOscillator()
   private var mixer = AKMixer()
+  private var generators = [AKOscillator]()
+  private let distanceThresholds = [1.0]
   
   @objc(setup)
   func setup() {
     AKSettings.playbackWhileMuted = true
     
     osc0 >>> mixer
-    osc0.amplitude = 0.5
+    osc0.amplitude = 0
+    generators.append(osc0)
+    
     AudioKit.output = mixer
     
     do {
@@ -28,6 +32,19 @@ class Conductor: NSObject {
     } catch {print(error.localizedDescription)}
     
     osc0.start()
+  }
+  
+  @objc(updateAmp: idx:)
+  func updateAmp(distance: NSNumber, idx: NSInteger) {
+    
+    if generators.count <= idx {
+      return
+    }
+    print("000_ disctance \(distance)")
+    let gen = generators[idx]
+    
+    gen.amplitude = 1 - ((abs(Float(truncating: distance)))/(distanceThresholds[idx]))
+    
   }
   
 }

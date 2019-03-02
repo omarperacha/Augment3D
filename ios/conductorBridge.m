@@ -13,4 +13,6 @@
 
 RCT_EXTERN_METHOD(setup)
 
+RCT_EXTERN_METHOD(updateAmp:(nonnull NSNumber *)distance idx:(NSInteger *)idx)
+
 @end

@@ -22,6 +22,7 @@ export default class HelloWorldSceneAR extends Component {
       text : "Initializing AR..."
     };
 
+      this.conductor = NativeModules.Conductor
     // bind 'this' to functions
     this._onInitialized = this._onInitialized.bind(this);
       this._update = this._update.bind(this);
@@ -41,7 +42,7 @@ export default class HelloWorldSceneAR extends Component {
       this.setState({
         text : "Hello World!"
       });
-        NativeModules.Conductor.setup();
+        this.conductor.setup();
     } else if (state == ViroConstants.TRACKING_NONE) {
       // Handle loss of tracking
     }
@@ -50,6 +51,7 @@ export default class HelloWorldSceneAR extends Component {
     _update(cameraTransform) {
         const x = calculateDist(cameraTransform.position, [0, 0, -1]);
         this.setState({text : String(x)});
+        this.conductor.updateAmp(x, 0);
     }
     
 }
