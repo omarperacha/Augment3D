@@ -13,21 +13,23 @@ import AudioKit
 class Conductor: NSObject {
   
   private var osc0 = AKOscillator()
-  private var mixer = AKMixer()
+  var mixer = AKMixer()
   private var generators = [AKOscillator]()
   private var conv : AKConvolution!
   private var dryWet = AKDryWetMixer()
   private let distanceThresholds = [1.0]
   
+  let fileUrl = Bundle(for: type(of: self) as! AnyClass).url(forResource: "Locked bass IR_1", withExtension:"wav")
+  
   @objc static func requiresMainQueueSetup() -> Bool {
     return false
   }
   
+  static let shared = Conductor()
+  
   @objc(setup)
   func setup() {
     AKSettings.playbackWhileMuted = true
-    
-    let fileUrl = Bundle(for: type(of: self)).url(forResource: "Locked bass IR_1", withExtension:"wav")
     
     conv = AKConvolution(impulseResponseFileURL: fileUrl!)
     
