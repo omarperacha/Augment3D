@@ -25,16 +25,16 @@ class RoomZero: Room {
     
   }
   
-  func updateFlows(distance: NSNumber){
+  func updateFlows(distance: NSNumber, yaw: NSNumber){
     
     if flows.count == 0 {
       return
     }
-    updateFlow0(distance: abs(Float(truncating: distance)))
+    updateFlow0(distance: abs(Float(truncating: distance)), yaw: Float(truncating: yaw))
     
   }
   
-  private func updateFlow0(distance: Float){
+  private func updateFlow0(distance: Float, yaw: Float){
     
     let gen = flows[0].generators[0]
     flows[0].genMixers[0].volume = distance < 1 ? 0.5 : 0
@@ -42,6 +42,10 @@ class RoomZero: Room {
     if let osc = gen as? AKOscillator {
       osc.frequency = 110 + 770 * (1 - (distance/(flows[0].distanceThreshold)))
     }
+    
+    let conv = flows[0].drywets[0][0]
+    conv.balance = max(0, ((-1 * yaw)/360) + 0.25)
+    print(conv.balance)
   }
   
 }

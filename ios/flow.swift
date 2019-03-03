@@ -44,10 +44,11 @@ class Flow {
         
         var drywet = AKDryWetMixer()
         if j == 0 {
-          effects[i][j].connect(to: inMixer.outputNode)
+          inMixer.setOutput(to: effects[i][j].avAudioNode)
           drywet = AKDryWetMixer(inMixer, effects[i][j])
         } else {
-          effects[i][j].connect(to: drywets[i][j - 1].outputNode)
+          // to do - make iteration safe
+          drywets[i][j - 1].connect(to: effects[i][j].avAudioNode)
           drywet = AKDryWetMixer(drywets[i][j - 1], effects[i][j])
         }
         

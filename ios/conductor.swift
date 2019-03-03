@@ -13,7 +13,7 @@ import AudioKit
 class Conductor: NSObject {
   
   var mixer = AKMixer()
-  
+  private var initialised = false
   private var rooms = [Room]()
   private let lock = NSLock()
   
@@ -23,6 +23,10 @@ class Conductor: NSObject {
   
   @objc(setup)
   func setup() {
+    
+    if initialised {
+      return
+    }
     
     lock.lock()
     defer {
@@ -48,18 +52,20 @@ class Conductor: NSObject {
       room.startFlows()
     }
     
+    initialised = true
   }
   
-  @objc(updateAmp: idx:)
-  func updateAmp(distance: NSNumber, idx: NSInteger) {
+  @objc(updateAmp: roll: yaw:)
+  func updateAmp(distances: NSArray, roll: NSNumber, yaw: NSNumber) {
     
     if rooms.count == 0 {
       return
     }
     
     if let room0 = rooms[0] as? RoomZero {
-      room0.updateFlows(distance: distance)
+      room0.updateFlows(distance: distances[0] as! NSNumber, yaw: yaw)
     }
+    
   
   }
   
