@@ -3,7 +3,7 @@
 //  Augment3d
 //
 //  Created by Omar Peracha on 03/03/2019.
-//  Copyright © 2019 Facebook. All rights reserved.
+//  Copyright © 2019 Omar Peracha. All rights reserved.
 //
 
 import Foundation
@@ -21,12 +21,8 @@ class Flow {
   private var output = AKMixer()
   private var effects = [[AKNode]]()
   
-  private var distUpdate : ((Float)->Void)?
-  private var rollUpdate : ((Float)->Void)?
-  private var yawUpdate : ((Float)->Void)?
-  
   // Mark - initialisation
-  init(conductor: Conductor, gens: [AKNode], FX: [[AKNode]]? = nil, distThresh: Double){
+  init(room: Room, gens: [AKNode], FX: [[AKNode]]? = nil, distThresh: Double){
     
     distanceThreshold = distThresh
     
@@ -68,37 +64,9 @@ class Flow {
       genMixers.last! >>> output
     }
     
-    output >>> conductor.mixer
-    
-    startGens()
+    output >>> room.mixer
   }
   
-  func setupDistUpdate(withFunc: @escaping (Float)->Void){
-    distUpdate = withFunc
-  }
-  
-  func setupRollUpdate(withFunc: @escaping (Float)->Void){
-    rollUpdate = withFunc
-  }
-  
-  func setupYawUpdate(withFunc: @escaping (Float)->Void){
-    yawUpdate = withFunc
-  }
-  
-  // Mark - public functionality
-  func update(distance: NSNumber, roll: NSNumber?, yaw: NSNumber?){
-    if distUpdate != nil{
-      distUpdate!(Float(truncating: distance))
-    }
-    
-    if rollUpdate != nil{
-      rollUpdate!(Float(truncating: roll!))
-    }
-    
-    if yawUpdate != nil{
-      yawUpdate!(Float(truncating: yaw!))
-    }
-  }
   
   // Mark - private functionality
   
