@@ -12,14 +12,10 @@ import AudioKit
 @objc(Conductor)
 class Conductor: NSObject {
   
-  private var osc0 = AKOscillator()
   var mixer = AKMixer()
-  private var generators = [AKOscillator]()
-  private var conv : AKConvolution!
-  private var dryWet = AKDryWetMixer()
-  private let distanceThresholds = [1.0]
   
-  let fileUrl = Bundle(for: type(of: self) as! AnyClass).url(forResource: "Locked bass IR_1", withExtension:"wav")
+  private let distanceThresholds = [1.0]
+  private var flows = [Flow]()
   
   @objc static func requiresMainQueueSetup() -> Bool {
     return false
@@ -31,17 +27,12 @@ class Conductor: NSObject {
   func setup() {
     AKSettings.playbackWhileMuted = true
     
-    conv = AKConvolution(impulseResponseFileURL: fileUrl!)
+    let fileUrl = Bundle(for: type(of: self)).url(forResource: "Locked bass IR_1", withExtension:"wav")
     
-    osc0 >>> conv
-  
-    osc0.amplitude = 0
-    generators.append(osc0)
+    let conv = AKConvolution(impulseResponseFileURL: fileUrl!)
     
-    dryWet = AKDryWetMixer(osc0, conv)
-    dryWet.balance = 0.2
-    
-    dryWet >>> mixer
+    let flow0 = Flow(conductor: self, gens: [AKOscillator()], FX: [[conv]], distThresh: distanceThresholds[0])
+    flows.append(flow0)
     
     AudioKit.output = mixer
     
@@ -49,23 +40,30 @@ class Conductor: NSObject {
       try AudioKit.start()
     } catch {print(error.localizedDescription)}
     
-    conv.start()
-    osc0.start()
+    for flow in flows {
+      flow.startGens()
+    }
+    
   }
   
   @objc(updateAmp: idx:)
   func updateAmp(distance: NSNumber, idx: NSInteger) {
     
-    if generators.count <= idx {
+    if flows.count == 0 {
       return
     }
     
-    let gen = generators[idx]
+    updateFlow0(distance: abs(Float(truncating: distance)))
     
-    gen.amplitude = Float(truncating: distance) < 1 ? 0 : 0.5
+  }
+  
+  func updateFlow0(distance: Float){
+    let gen = flows[0].generators[0]
+    flows[0].genMixers[0].volume = distance < 1 ? 0.5 : 0
     
-    gen.frequency = 110 + 770 * (1 - ((abs(Float(truncating: distance)))/(distanceThresholds[idx])))
-    
+    if let osc = gen as? AKOscillator {
+      osc.frequency = 110 + 770 * (1 - (distance/(flows[0].distanceThreshold)))
+    }
   }
   
 }

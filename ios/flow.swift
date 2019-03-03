@@ -12,12 +12,14 @@ import AudioKit
 
 class Flow {
   
-  private var generators = [AKNode]()
-  private var genMixers = [AKMixer]()
-  private var effects = [[AKNode]]()
-  private var drywets = [[AKDryWetMixer]]()
+  var distanceThreshold: Double = 100
+  var generators = [AKNode]()
+  var drywets = [[AKDryWetMixer]]()
+  var genMixers = [AKMixer]()
+  
+  
   private var output = AKMixer()
-  private var distanceThreshold: Double = 100
+  private var effects = [[AKNode]]()
   
   private var distUpdate : ((Float)->Void)?
   private var rollUpdate : ((Float)->Void)?
@@ -25,6 +27,8 @@ class Flow {
   
   // Mark - initialisation
   init(conductor: Conductor, gens: [AKNode], FX: [[AKNode]]? = nil, distThresh: Double){
+    
+    distanceThreshold = distThresh
     
     generators = gens
     if FX != nil {
@@ -82,17 +86,17 @@ class Flow {
   }
   
   // Mark - public functionality
-  func update(distance: NSNumber, roll: NSNumber, yaw: NSNumber){
+  func update(distance: NSNumber, roll: NSNumber?, yaw: NSNumber?){
     if distUpdate != nil{
       distUpdate!(Float(truncating: distance))
     }
     
     if rollUpdate != nil{
-      rollUpdate!(Float(truncating: roll))
+      rollUpdate!(Float(truncating: roll!))
     }
     
     if yawUpdate != nil{
-      yawUpdate!(Float(truncating: yaw))
+      yawUpdate!(Float(truncating: yaw!))
     }
   }
   
@@ -106,6 +110,17 @@ class Flow {
         gen.start()
       }
     }
+    
+    for i in effects.indices {
+      for FX in effects[i] {
+        
+        if let fx = FX as? AKConvolution {
+          fx.start()
+        }
+        
+      }
+    }
+    
   }
   
   
