@@ -15,15 +15,31 @@ class Conductor: NSObject {
   private var osc0 = AKOscillator()
   private var mixer = AKMixer()
   private var generators = [AKOscillator]()
+  private var conv : AKConvolution!
+  private var dryWet = AKDryWetMixer()
   private let distanceThresholds = [1.0]
+  
+  @objc static func requiresMainQueueSetup() -> Bool {
+    return false
+  }
   
   @objc(setup)
   func setup() {
     AKSettings.playbackWhileMuted = true
     
-    osc0 >>> mixer
+    let fileUrl = Bundle(for: type(of: self)).url(forResource: "Locked bass IR_1", withExtension:"wav")
+    
+    conv = AKConvolution(impulseResponseFileURL: fileUrl!)
+    
+    osc0 >>> conv
+  
     osc0.amplitude = 0
     generators.append(osc0)
+    
+    dryWet = AKDryWetMixer(osc0, conv)
+    dryWet.balance = 0.2
+    
+    dryWet >>> mixer
     
     AudioKit.output = mixer
     
@@ -31,6 +47,7 @@ class Conductor: NSObject {
       try AudioKit.start()
     } catch {print(error.localizedDescription)}
     
+    conv.start()
     osc0.start()
   }
   
@@ -40,10 +57,12 @@ class Conductor: NSObject {
     if generators.count <= idx {
       return
     }
-    print("000_ disctance \(distance)")
+    
     let gen = generators[idx]
     
-    gen.amplitude = 1 - ((abs(Float(truncating: distance)))/(distanceThresholds[idx]))
+    gen.amplitude = Float(truncating: distance) < 1 ? 0 : 0.5
+    
+    gen.frequency = 110 + 770 * (1 - ((abs(Float(truncating: distance)))/(distanceThresholds[idx])))
     
   }
   

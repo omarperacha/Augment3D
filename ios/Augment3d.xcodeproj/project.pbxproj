@@ -38,6 +38,8 @@
 		2DF0FFEE2056DD460020B375 /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3DAD3EA31DF850E9000B6D8A /* libReact.a */; };
 		59B9C492222A0527004BDB6F /* conductor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59B9C491222A0527004BDB6F /* conductor.swift */; };
 		59B9C4A0222A06D4004BDB6F /* conductorBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 59B9C49F222A06D4004BDB6F /* conductorBridge.m */; };
+		59EEB919222C4D550089C065 /* Locked bass IR_1.wav in Resources */ = {isa = PBXBuildFile; fileRef = 59EEB8F3222C4D550089C065 /* Locked bass IR_1.wav */; };
+		59EEB91A222C510E0089C065 /* Locked bass IR_1.wav in Resources */ = {isa = PBXBuildFile; fileRef = 59EEB8F3222C4D550089C065 /* Locked bass IR_1.wav */; };
 		66002AC5B686977F8D15A192 /* Pods_Augment3d.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9782E3B9148544FDF7AFB9B7 /* Pods_Augment3d.framework */; };
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
 		ADBDB9381DFEBF1600ED6528 /* libRCTBlob.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ADBDB9271DFEBF0700ED6528 /* libRCTBlob.a */; };
@@ -345,6 +347,7 @@
 		59B9C490222A0526004BDB6F /* Augment3d-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Augment3d-Bridging-Header.h"; sourceTree = "<group>"; };
 		59B9C491222A0527004BDB6F /* conductor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = conductor.swift; sourceTree = "<group>"; };
 		59B9C49F222A06D4004BDB6F /* conductorBridge.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = conductorBridge.m; sourceTree = "<group>"; };
+		59EEB8F3222C4D550089C065 /* Locked bass IR_1.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "Locked bass IR_1.wav"; sourceTree = "<group>"; };
 		5E91572D1DD0AC6500FF2AA8 /* RCTAnimation.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTAnimation.xcodeproj; path = "../node_modules/react-native/Libraries/NativeAnimation/RCTAnimation.xcodeproj"; sourceTree = "<group>"; };
 		629C07C743E2B302B8076EA5 /* Pods-Augment3d.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Augment3d.release.xcconfig"; path = "Pods/Target Support Files/Pods-Augment3d/Pods-Augment3d.release.xcconfig"; sourceTree = "<group>"; };
 		78C398B01ACF4ADC00677621 /* RCTLinking.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTLinking.xcodeproj; path = "../node_modules/react-native/Libraries/LinkingIOS/RCTLinking.xcodeproj"; sourceTree = "<group>"; };
@@ -491,6 +494,7 @@
 		13B07FAE1A68108700A75B9A /* Augment3d */ = {
 			isa = PBXGroup;
 			children = (
+				59EEB8F2222C4D550089C065 /* Sounds */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
@@ -535,6 +539,14 @@
 				9782E3B9148544FDF7AFB9B7 /* Pods_Augment3d.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		59EEB8F2222C4D550089C065 /* Sounds */ = {
+			isa = PBXGroup;
+			children = (
+				59EEB8F3222C4D550089C065 /* Locked bass IR_1.wav */,
+			);
+			path = Sounds;
 			sourceTree = "<group>";
 		};
 		5E91572E1DD0AC6500FF2AA8 /* Products */ = {
@@ -1074,6 +1086,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				59EEB91A222C510E0089C065 /* Locked bass IR_1.wav in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1082,6 +1095,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
+				59EEB919222C4D550089C065 /* Locked bass IR_1.wav in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
