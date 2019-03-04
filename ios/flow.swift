@@ -17,14 +17,15 @@ class Flow {
   var drywets = [[AKDryWetMixer]]()
   var genMixers = [AKMixer]()
   
-  
+  private var position = [0.0, 0.0, 0.0]
   private var output = AKMixer()
   private var effects = [[AKNode]]()
   
   // Mark - initialisation
-  init(room: Room, gens: [AKNode], FX: [[AKNode]]? = nil, distThresh: Double){
+  init(room: Room, gens: [AKNode], FX: [[AKNode]]? = nil, distThresh: Double, pos: [Double]){
     
     distanceThreshold = distThresh
+    position = pos
     
     generators = gens
     if FX != nil {
@@ -66,6 +67,14 @@ class Flow {
     }
     
     output >>> room.mixer
+  }
+  
+  func calculateDist(pos: [Double]) -> Double {
+    let x = pos[0] - position[0];
+    let y = pos[1] - position[1];
+    let z = pos[2] - position[2];
+    
+    return sqrt((x*x)+(y*y)+(z*z))
   }
   
   

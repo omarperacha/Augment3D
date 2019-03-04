@@ -56,14 +56,14 @@ class Conductor: NSObject {
   }
   
   @objc(updateAmp: roll: yaw:)
-  func updateAmp(distances: NSArray, roll: NSNumber, yaw: NSNumber) {
+  func updateAmp(pos: NSArray, roll: NSNumber, yaw: NSNumber) {
     
     if rooms.count == 0 {
       return
     }
     
     if let room0 = rooms[0] as? RoomZero {
-      room0.updateFlows(distance: distances[0] as! NSNumber, yaw: yaw)
+      room0.updateFlows(pos: pos, yaw: yaw)
     }
     
   

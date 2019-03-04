@@ -19,7 +19,6 @@ export default class HelloWorldSceneAR extends Component {
 
     // Set initial state here
     this.state = {
-      text : "Initializing AR..."
     };
 
       this.conductor = NativeModules.Conductor
@@ -31,7 +30,6 @@ export default class HelloWorldSceneAR extends Component {
   render() {
     return (
             <ViroARScene onTrackingUpdated={this._onInitialized} onCameraTransformUpdate={this._update}>
-            <ViroText text={this.state.text} scale={[.5, .5, .5]} position={[0, 2, -2]} style={styles.helloWorldTextStyle} />
             <ViroBox position={[0, 0, -1]} scale={[.3, .3, .3]} />
       </ViroARScene>
     );
@@ -49,24 +47,14 @@ export default class HelloWorldSceneAR extends Component {
   }
     
     _update(cameraTransform) {
-        const x = calculateDist(cameraTransform.position, [0, 0, -1]);
+        const pos = cameraTransform.position;
         const roll = cameraTransform.rotation[0]
         const yaw = cameraTransform.rotation[2]
-        const dists = [x]
-        this.setState({text : String(x)});
-        this.conductor.updateAmp(dists, roll, yaw);
+        this.conductor.updateAmp(pos, roll, yaw);
     }
     
 }
 
-
-function calculateDist(dist1, dist2){
-    const x = dist1[0] - dist2[0];
-    const y = dist1[1] - dist2[1];
-    const z = dist1[2] - dist2[2];
-    
-    return Math.sqrt((x*x)+(y*y)+(z*z))
-};
 
 var styles = StyleSheet.create({
   helloWorldTextStyle: {

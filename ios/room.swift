@@ -20,24 +20,33 @@ class RoomZero: Room {
     
     let conv = AKConvolution(impulseResponseFileURL: fileUrl!)
     
-    let flow0 = Flow(room: self, gens: [AKOscillator()], FX: [[conv]], distThresh: distanceThresholds[0])
+    let flow0 = Flow(room: self,
+                     gens: [AKOscillator()],
+                     FX: [[conv]],
+                     distThresh: distanceThresholds[0],
+                     pos: [0, 0, -1])
+    
     flows.append(flow0)
     
   }
   
-  func updateFlows(distance: NSNumber, yaw: NSNumber){
+  func updateFlows(pos: NSArray, yaw: NSNumber){
     
     if flows.count == 0 {
       return
     }
-    updateFlow0(distance: abs(Float(truncating: distance)), yaw: Float(truncating: yaw))
+    
+    updateFlow0(pos: pos, yaw: Float(truncating: yaw))
     
   }
   
-  private func updateFlow0(distance: Float, yaw: Float){
+  private func updateFlow0(pos: NSArray, yaw: Float){
     
-    let gen = flows[0].generators[0]
-    flows[0].genMixers[0].volume = distance < 1 ? 0.5 : 0
+    let flow = flows[0]
+    let distance = flow.calculateDist(pos: pos as! [Double])
+    
+    let gen = flow.generators[0]
+    flow.genMixers[0].volume = distance < 1 ? 0.5 : 0
     
     if let osc = gen as? AKOscillator {
       osc.frequency = 110 + 770 * (1 - (distance/(flows[0].distanceThreshold)))
@@ -45,7 +54,6 @@ class RoomZero: Room {
     
     let conv = flows[0].drywets[0][0]
     conv.balance = max(0, ((-1 * yaw)/360) + 0.25)
-    print(conv.balance)
   }
   
 }

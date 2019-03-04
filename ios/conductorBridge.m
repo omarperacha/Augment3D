@@ -13,6 +13,6 @@
 
 RCT_EXTERN_METHOD(setup)
 
-RCT_EXTERN_METHOD(updateAmp:(nonnull NSArray *)distances roll:(nonnull NSNumber *)roll yaw:(nonnull NSNumber *)yaw)
+RCT_EXTERN_METHOD(updateAmp:(nonnull NSArray *)pos roll:(nonnull NSNumber *)roll yaw:(nonnull NSNumber *)yaw)
 
 @end
