@@ -49,11 +49,11 @@ class Flow {
           drywet = AKDryWetMixer(inMixer, effects[i][j])
         } else {
           // to do - make iteration safe
-          drywets[i][j - 1].connect(to: effects[i][j].avAudioNode)
+          drywetChain[j - 1].connect(to: effects[i][j].avAudioNode)
           drywet = AKDryWetMixer(drywets[i][j - 1], effects[i][j])
         }
         
-        drywet.balance = 0
+        drywet.balance = 1
         drywetChain.append(drywet)
       }
       
