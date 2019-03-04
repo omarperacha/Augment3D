@@ -9,7 +9,7 @@
 import Foundation
 import AudioKit
 
-class RoomZero: Room {
+class RoomConv: Room {
   
   private let distanceThresholds = [1.0]
   
@@ -19,10 +19,12 @@ class RoomZero: Room {
     let fileUrl = Bundle(for: type(of: self)).url(forResource: "Locked bass IR_1", withExtension:"wav")
     
     let conv = AKConvolution(impulseResponseFileURL: fileUrl!)
+    let convHP = AKHighPassFilter(nil, cutoffFrequency: 200, resonance: 0)
+    let convReduce = AKBooster(nil, gain: -2)
     
     let flow0 = Flow(room: self,
                      gens: [AKOscillator()],
-                     FX: [[conv]],
+                     FX: [[conv, convHP, convReduce, AKPeakLimiter()]],
                      distThresh: distanceThresholds[0],
                      pos: [0, 0, -1])
     
@@ -43,17 +45,18 @@ class RoomZero: Room {
   private func updateFlow0(pos: NSArray, yaw: Float){
     
     let flow = flows[0]
+    let sinVol = 0.4
     let distance = flow.calculateDist(pos: pos as! [Double])
     
     let gen = flow.generators[0]
-    flow.genMixers[0].volume = distance < 1 ? 0.5 : 0
+    flow.genMixers[0].volume = distance < (flow.distanceThreshold - 0.1) ? sinVol : max(0, ((flow.distanceThreshold - distance)/0.1*sinVol))
     
     if let osc = gen as? AKOscillator {
-      osc.frequency = 110 + 770 * (1 - (distance/(flows[0].distanceThreshold)))
+      osc.frequency = 110 + 770 * (1 - (distance/(flow.distanceThreshold)))
     }
     
-    let conv = flows[0].drywets[0][0]
-    conv.balance = max(0, ((-1 * yaw)/360) + 0.25)
+    let conv = flow.drywets[0][0]
+    conv.balance = max(0.01, ((-1 * yaw)/360) + 0.25)
   }
   
 }

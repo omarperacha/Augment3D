@@ -35,8 +35,8 @@ class Conductor: NSObject {
     
     AKSettings.playbackWhileMuted = true
     
-    let room0 = RoomZero()
-    rooms.append(room0)
+    let roomConv = RoomConv()
+    rooms.append(roomConv)
     
     for room in rooms {
       room.mixer >>> mixer
@@ -62,7 +62,7 @@ class Conductor: NSObject {
       return
     }
     
-    if let room0 = rooms[0] as? RoomZero {
+    if let room0 = rooms[0] as? RoomConv {
       room0.updateFlows(pos: pos, yaw: yaw)
     }
     

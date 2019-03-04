@@ -48,9 +48,8 @@ class Flow {
           inMixer.setOutput(to: effects[i][j].avAudioNode)
           drywet = AKDryWetMixer(inMixer, effects[i][j])
         } else {
-          // to do - make iteration safe
           drywetChain[j - 1].connect(to: effects[i][j].avAudioNode)
-          drywet = AKDryWetMixer(drywets[i][j - 1], effects[i][j])
+          drywet = AKDryWetMixer(drywetChain[j - 1], effects[i][j])
         }
         
         drywet.balance = 1
@@ -86,16 +85,6 @@ class Flow {
         gen.start()
       } else if let gen = generator as? AKWaveTable {
         gen.start()
-      }
-    }
-    
-    for i in effects.indices {
-      for FX in effects[i] {
-        
-        if let fx = FX as? AKConvolution {
-          fx.start()
-        }
-        
       }
     }
     
