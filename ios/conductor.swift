@@ -55,12 +55,14 @@ class Conductor: NSObject {
     initialised = true
   }
   
-  @objc(updateAmp: roll: yaw:)
-  func updateAmp(pos: NSArray, roll: NSNumber, yaw: NSNumber) {
+  @objc(updateAmp: pitch: roll: yaw: forward:)
+  func updateAmp(pos: NSArray, pitch: NSNumber, roll: NSNumber, yaw: NSNumber, forward: NSArray) {
     
     if rooms.count == 0 {
       return
     }
+    
+    //to-do mod yaw with forward vector[2]
     
     if let room0 = rooms[0] as? RoomConv {
       room0.updateFlows(pos: pos, yaw: yaw)

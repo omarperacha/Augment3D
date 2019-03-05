@@ -38,9 +38,6 @@ export default class HelloWorldSceneAR extends Component {
 
   _onInitialized(state, reason) {
     if (state == ViroConstants.TRACKING_NORMAL) {
-      this.setState({
-        text : "Hello World!"
-      });
         this.conductor.setup();
     } else if (state == ViroConstants.TRACKING_NONE) {
       // Handle loss of tracking
@@ -49,9 +46,11 @@ export default class HelloWorldSceneAR extends Component {
     
     _update(cameraTransform) {
         const pos = cameraTransform.position;
-        const roll = cameraTransform.rotation[0]
-        const yaw = cameraTransform.rotation[2]
-        this.conductor.updateAmp(pos, roll, yaw);
+        const pitch = cameraTransform.rotation[0];
+        const roll = cameraTransform.rotation[1];
+        const yaw = cameraTransform.rotation[2];
+        const forward = cameraTransform.forward;
+        this.conductor.updateAmp(pos, pitch, roll, yaw, forward);
     }
     
 }
