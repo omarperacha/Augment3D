@@ -9,6 +9,7 @@
 import Foundation
 import AudioKit
 
+// MARK -- Convolution Room
 class RoomConv: Room {
   
   private let distanceThresholds = [1.0]
@@ -23,6 +24,7 @@ class RoomConv: Room {
     let convReduce = AKBooster(nil, gain: -2)
     
     let flow0 = Flow(room: self,
+                     //to do - make gen morphing oscillator
                      gens: [AKOscillator()],
                      FX: [[conv, convHP, convReduce, AKPeakLimiter()]],
                      distThresh: distanceThresholds[0],
@@ -45,14 +47,14 @@ class RoomConv: Room {
   private func updateFlow0(pos: NSArray, yaw: Float){
     
     let flow = flows[0]
-    let sinVol = 0.4
+    let sinVol = 0.3
     let distance = flow.calculateDist(pos: pos as! [Double])
     
     let gen = flow.generators[0]
     flow.genMixers[0].volume = distance < (flow.distanceThreshold - 0.1) ? sinVol : max(0, ((flow.distanceThreshold - distance)/0.1*sinVol))
     
     if let osc = gen as? AKOscillator {
-      osc.frequency = 110 + 770 * (1 - (distance/(flow.distanceThreshold)))
+      osc.frequency = 30 + 970 * (1 - (distance/(flow.distanceThreshold)))
     }
     
     let conv = flow.drywets[0][0]
@@ -61,6 +63,28 @@ class RoomConv: Room {
   
 }
 
+// MARK -- Guitar Room
+class RoomGuitar: Room {
+  
+  private let distanceThresholds = [1.0]
+  
+  override init(){
+    super.init()
+    
+  }
+  
+  func updateFlows(pos: NSArray, yaw: NSNumber){
+    
+    if flows.count == 0 {
+      return
+    }
+    
+  }
+  
+  
+}
+
+// MARK -- Room Superclass
 class Room {
   
   var mixer = AKMixer()

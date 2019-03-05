@@ -31,6 +31,7 @@ export default class HelloWorldSceneAR extends Component {
     return (
             <ViroARScene onTrackingUpdated={this._onInitialized} onCameraTransformUpdate={this._update}>
             <ViroBox position={[0, 0, -1]} scale={[.3, .3, .3]} />
+            <ViroBox position={[0, 0, -5]} scale={[.3, .3, .3]} />
       </ViroARScene>
     );
   }
