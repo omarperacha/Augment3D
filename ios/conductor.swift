@@ -63,6 +63,7 @@ class Conductor: NSObject {
     }
     
     //to-do mod yaw with forward vector[2]
+    print(forward)
     
     if let room0 = rooms[0] as? RoomConv {
       room0.updateFlows(pos: pos, yaw: yaw)
