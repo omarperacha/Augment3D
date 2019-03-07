@@ -8,6 +8,7 @@
 
 import Foundation
 import AudioKit
+import CoreMotion
 
 @objc(Conductor)
 class Conductor: NSObject {
@@ -15,7 +16,11 @@ class Conductor: NSObject {
   var mixer = AKMixer()
   private var initialised = false
   private var rooms = [Room]()
+  var gravX = 0.0
+  var gravY = 0.0
+  
   private let lock = NSLock()
+  private let motionManager = CMMotionManager()
   
   @objc static func requiresMainQueueSetup() -> Bool {
     return false
@@ -44,6 +49,25 @@ class Conductor: NSObject {
     
     AudioKit.output = mixer
     
+    if motionManager.isDeviceMotionAvailable {
+      
+      motionManager.deviceMotionUpdateInterval = 0.1
+      
+      motionManager.startDeviceMotionUpdates(to: OperationQueue()) { (motion, error) -> Void in
+        
+        if let gravity = motion?.gravity {
+          self.gravX = gravity.x
+          self.gravY = gravity.y
+        }
+        
+      }
+      
+      print("Device motion started")
+    }
+    else {
+      print("Device motion unavailable")
+    }
+    
     do {
       try AudioKit.start()
     } catch {print(error.localizedDescription)}
@@ -55,18 +79,15 @@ class Conductor: NSObject {
     initialised = true
   }
   
-  @objc(updateAmp: pitch: roll: yaw: forward:)
-  func updateAmp(pos: NSArray, pitch: NSNumber, roll: NSNumber, yaw: NSNumber, forward: NSArray) {
+  @objc(updateAmp: forward:)
+  func updateAmp(pos: NSArray, forward: NSArray) {
     
     if rooms.count == 0 {
       return
     }
     
-    //to-do mod yaw with forward vector[2]
-    print(forward)
-    
     if let room0 = rooms[0] as? RoomConv {
-      room0.updateFlows(pos: pos, yaw: yaw)
+      room0.updateFlows(pos: pos, yaw: gravX, gravY: gravY)
     }
     
   

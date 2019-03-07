@@ -46,11 +46,8 @@ export default class HelloWorldSceneAR extends Component {
     
     _update(cameraTransform) {
         const pos = cameraTransform.position;
-        const pitch = cameraTransform.rotation[0];
-        const roll = cameraTransform.rotation[1];
-        const yaw = cameraTransform.rotation[2];
         const forward = cameraTransform.forward;
-        this.conductor.updateAmp(pos, pitch, roll, yaw, forward);
+        this.conductor.updateAmp(pos, forward);
     }
     
 }

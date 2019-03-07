@@ -13,6 +13,6 @@
 
 RCT_EXTERN_METHOD(setup)
 
-RCT_EXTERN_METHOD(updateAmp:(nonnull NSArray *)pos pitch:(nonnull NSNumber *)pitch roll:(nonnull NSNumber *)roll yaw:(nonnull NSNumber *)yaw forward:(nonnull NSArray *)forward)
+RCT_EXTERN_METHOD(updateAmp:(nonnull NSArray *)pos forward:(nonnull NSArray *)forward)
 
 @end

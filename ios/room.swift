@@ -34,17 +34,17 @@ class RoomConv: Room {
     
   }
   
-  func updateFlows(pos: NSArray, yaw: NSNumber){
+  func updateFlows(pos: NSArray, yaw: Double, gravY: Double){
     
     if flows.count == 0 {
       return
     }
     
-    updateFlow0(pos: pos, yaw: Float(truncating: yaw))
+    updateFlow0(pos: pos, yaw: yaw, gravY: gravY)
     
   }
   
-  private func updateFlow0(pos: NSArray, yaw: Float){
+  private func updateFlow0(pos: NSArray, yaw: Double, gravY: Double){
     
     let flow = flows[0]
     let sinVol = 0.3
@@ -57,8 +57,19 @@ class RoomConv: Room {
       osc.frequency = 30 + 970 * (1 - (distance/(flow.distanceThreshold)))
     }
     
+    var _yaw = yaw
+    if gravY > 0 {
+      let negative = (yaw < 0)
+      
+      if negative {
+        _yaw = -1 - (abs(gravY))
+      } else {
+        _yaw = 1 + (abs(gravY))
+      }
+    }
+    
     let conv = flow.drywets[0][0]
-    conv.balance = max(0.01, ((-1 * yaw)/360) + 0.25)
+    conv.balance = max(0.01, (_yaw/4) + 0.25)
   }
   
 }
