@@ -42,6 +42,8 @@ class Conductor: NSObject {
     
     let roomConv = RoomConv()
     rooms.append(roomConv)
+    let roomAlien = RoomAlien()
+    rooms.append(roomAlien)
     
     for room in rooms {
       room.mixer >>> mixer
@@ -90,6 +92,9 @@ class Conductor: NSObject {
       room0.updateFlows(pos: pos, yaw: gravX, gravY: gravY)
     }
     
+    if let roomAlien = rooms[1] as? RoomAlien {
+      roomAlien.updateFlows(pos: pos, yaw: gravX, gravY: gravY)
+    }
   
   }
   

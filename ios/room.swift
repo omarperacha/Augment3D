@@ -28,7 +28,7 @@ class RoomConv: Room {
                      gens: [AKOscillator()],
                      FX: [[conv, convHP, convReduce, AKPeakLimiter()]],
                      distThresh: distanceThresholds[0],
-                     pos: [0, 0, -1])
+                     pos: [0, 0, -5])
     
     flows.append(flow0)
     
@@ -84,13 +84,62 @@ class RoomGuitar: Room {
     
   }
   
-  func updateFlows(pos: NSArray, yaw: NSNumber){
+  func updateFlows(pos: NSArray, yaw: Double, gravY: Double){
     
     if flows.count == 0 {
       return
     }
     
   }
+  
+  
+}
+
+
+// MARK -- Metal Room
+class RoomAlien: Room {
+  
+  private let distanceThresholds = [1.0]
+  
+  override init(){
+    super.init()
+    
+    let file = try! AKAudioFile(readFileName: "alien lo.m4a")
+    let sampler = AKWaveTable()
+    
+    sampler.load(file: file)
+    
+    let flow0 = Flow(room: self,
+      gens: [sampler],
+      FX: [[AKPitchShifter()]],
+      distThresh: distanceThresholds[0],
+      pos: [0, 0, -1])
+    
+    flows.append(flow0)
+    
+  }
+  
+  func updateFlows(pos: NSArray, yaw: Double, gravY: Double){
+    
+    if flows.count == 0 {
+      return
+    }
+  
+  }
+  
+  func playSampler(){
+    
+    if let sampler = flows[0].generators[0] as? AKWaveTable {
+      flows[0].genMixers[0].volume = 1
+      sampler.loopEnabled = true
+      sampler.play()
+    }
+  }
+  
+  override func startFlows() {
+    playSampler()
+  }
+  
   
   
 }

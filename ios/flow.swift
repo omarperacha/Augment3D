@@ -13,13 +13,13 @@ import AudioKit
 class Flow {
   
   var distanceThreshold: Double = 100
-  var generators = [AKNode]()
   var drywets = [[AKDryWetMixer]]()
+  var effects = [[AKNode]]()
   var genMixers = [AKMixer]()
+  var generators = [AKNode]()
   
   private var position = [0.0, 0.0, 0.0]
   private var output = AKMixer()
-  private var effects = [[AKNode]]()
   
   // Mark - initialisation
   init(room: Room, gens: [AKNode], FX: [[AKNode]]? = nil, distThresh: Double, pos: [Double]){
@@ -62,6 +62,7 @@ class Flow {
     if let findalDW = drywets.last?.last {
       findalDW >>> output
     } else {
+      print("000_ connecting genMixer to output, room \(room)")
       genMixers.last! >>> output
     }
     
@@ -84,6 +85,7 @@ class Flow {
       if let gen = generator as? AKOscillator {
         gen.start()
       } else if let gen = generator as? AKWaveTable {
+        gen.loopEnabled = true
         gen.start()
       }
     }
