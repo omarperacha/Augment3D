@@ -96,7 +96,7 @@ class RoomGuitar: Room {
 }
 
 
-// MARK -- Metal Room
+// MARK -- Alien Room
 class RoomAlien: Room {
   
   private let distanceThresholds = [1.0]
@@ -124,20 +124,15 @@ class RoomAlien: Room {
     if flows.count == 0 {
       return
     }
+    
+    let distance = flows[0].calculateDist(pos: pos as! [Double])
+    
+    flows[0].genMixers[0].volume = (1 - (distance/(flows[0].distanceThreshold)))
   
   }
   
   func playSampler(){
     
-    if let sampler = flows[0].generators[0] as? AKWaveTable {
-      flows[0].genMixers[0].volume = 1
-      sampler.loopEnabled = true
-      sampler.play()
-    }
-  }
-  
-  override func startFlows() {
-    playSampler()
   }
   
   
