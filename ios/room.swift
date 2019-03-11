@@ -99,15 +99,13 @@ class RoomGuitar: Room {
 // MARK -- Alien Room
 class RoomAlien: Room {
   
-  private let distanceThresholds = [0.85, 1.4]
+  private let distanceThresholds = [0.75, 1.4]
   
   override init(){
     super.init()
     
     let file = try! AKAudioFile(readFileName: "alien lo.m4a")
     let sampler = AKWaveTable()
-    sampler.loopStartPoint = 0
-    sampler.loopEndPoint = (44100 * 20)
     
     sampler.load(file: file)
     
@@ -115,7 +113,7 @@ class RoomAlien: Room {
       gens: [sampler],
       FX: [[AKPitchShifter(), AKCostelloReverb()]],
       distThresh: distanceThresholds[0],
-      pos: [0.3, -0.2, -1])
+      pos: [-0.3, -0.2, -1])
     
     flows.append(flow0)
     
@@ -123,9 +121,12 @@ class RoomAlien: Room {
                      gens: [sampler],
                      FX: [[AKPitchShifter(), AKCostelloReverb()]],
                      distThresh: distanceThresholds[0],
-                     pos: [-0.3, -0.2, -1])
+                     pos: [0.3, -0.2, -1])
     
     flows.append(flow1)
+    
+    sampler.loopStartPoint = 0
+    sampler.loopEndPoint = (44100 * 18)
     
   }
   
@@ -154,8 +155,11 @@ class RoomAlien: Room {
         }
       }
       
-      if currentFlow == 1 {
-        _yaw += 3.5
+      if currentFlow == 0 {
+        _yaw -= 1.75
+      } else if currentFlow == 1 {
+        _yaw *= -1
+        _yaw += 1.75
       }
       
       if let pitchShift = flow.effects[0][0] as? AKPitchShifter {
