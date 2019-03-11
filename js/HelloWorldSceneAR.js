@@ -32,6 +32,7 @@ export default class HelloWorldSceneAR extends Component {
             <ViroARScene onTrackingUpdated={this._onInitialized} onCameraTransformUpdate={this._update}>
             <ViroBox position={[0.3, -0.2, -1]} scale={[.3, .3, .3]} />
             <ViroBox position={[-0.3, -0.2, -1]} scale={[.3, .3, .3]} />
+            <ViroBox position={[0, 0.2, -1.8]} scale={[.3, .3, .3]} materials={["black"]} />
             <ViroBox position={[0, 0, -5]} scale={[.3, .3, .3]} />
       </ViroARScene>
     );
@@ -62,6 +63,12 @@ var styles = StyleSheet.create({
     textAlignVertical: 'center',
     textAlign: 'center',  
   },
+});
+
+ViroMaterials.createMaterials({
+    black: {
+        diffuseTexture: require('./res/Black.jpg'),
+    },
 });
 
 module.exports = HelloWorldSceneAR;

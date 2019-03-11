@@ -99,7 +99,7 @@ class RoomGuitar: Room {
 // MARK -- Alien Room
 class RoomAlien: Room {
   
-  private let distanceThresholds = [0.75, 1.4]
+  private let distanceThresholds = [0.8, 1.4]
   
   override init(){
     super.init()
