@@ -99,23 +99,33 @@ class RoomGuitar: Room {
 // MARK -- Alien Room
 class RoomAlien: Room {
   
-  private let distanceThresholds = [1.0]
+  private let distanceThresholds = [0.85, 1.4]
   
   override init(){
     super.init()
     
     let file = try! AKAudioFile(readFileName: "alien lo.m4a")
     let sampler = AKWaveTable()
+    sampler.loopStartPoint = 0
+    sampler.loopEndPoint = (44100 * 20)
     
     sampler.load(file: file)
     
     let flow0 = Flow(room: self,
       gens: [sampler],
-      FX: [[AKPitchShifter()]],
+      FX: [[AKPitchShifter(), AKCostelloReverb()]],
       distThresh: distanceThresholds[0],
-      pos: [0, 0, -1])
+      pos: [0.3, -0.2, -1])
     
     flows.append(flow0)
+    
+    let flow1 = Flow(room: self,
+                     gens: [sampler],
+                     FX: [[AKPitchShifter(), AKCostelloReverb()]],
+                     distThresh: distanceThresholds[0],
+                     pos: [-0.3, -0.2, -1])
+    
+    flows.append(flow1)
     
   }
   
@@ -125,10 +135,37 @@ class RoomAlien: Room {
       return
     }
     
-    let distance = flows[0].calculateDist(pos: pos as! [Double])
+    // flows 0 && 1
+    var currentFlow = -1
+    for flow in flows[0...1]{
+      currentFlow += 1
+      let distance = flow.calculateDist(pos: pos as! [Double])
     
-    flows[0].genMixers[0].volume = (1 - (distance/(flows[0].distanceThreshold)))
-  
+      flow.genMixers[0].volume = (1 - (distance/(flow.distanceThreshold)))
+      
+      var _yaw = yaw
+      if gravY > 0 {
+        let negative = (yaw < 0)
+        
+        if negative {
+          _yaw = -1 - (abs(gravY))
+        } else {
+          _yaw = 1 + (abs(gravY))
+        }
+      }
+      
+      if currentFlow == 1 {
+        _yaw += 3.5
+      }
+      
+      if let pitchShift = flow.effects[0][0] as? AKPitchShifter {
+        pitchShift.shift = _yaw
+      }
+      
+      
+    }
+    
+    // flow 2
   }
   
   func playSampler(){
