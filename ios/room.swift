@@ -99,29 +99,41 @@ class RoomGuitar: Room {
 // MARK -- Alien Room
 class RoomAlien: Room {
   
-  private let distanceThresholds = [0.8, 1.8]
+  private let distanceThresholds = [0.9, 1.8]
+  private var basePitchFactor = 0.875
+  private var basePitch = 0.0
   
   override init(){
     super.init()
     
+    let revFB = 0.4
+    let revCO = 1200.0
+    
     let file = try! AKAudioFile(readFileName: "alien lo.m4a")
     let sampler = AKWaveTable()
+    let rev = AKCostelloReverb()
+    rev.feedback = revFB
+    rev.cutoffFrequency = revCO
     
     sampler.load(file: file)
     
     let flow0 = Flow(room: self,
       gens: [sampler],
-      FX: [[AKPitchShifter(), AKCostelloReverb()]],
+      FX: [[AKPitchShifter(), AKBooster(gain: 2.5), rev]],
       distThresh: distanceThresholds[0],
-      pos: [-0.3, -0.2, -1])
+      pos: [-0.4, -0.2, -1])
     
     flows.append(flow0)
     
+    let rev2 = AKCostelloReverb()
+    rev2.feedback = revFB
+    rev2.cutoffFrequency = revCO
+    
     let flow1 = Flow(room: self,
                      gens: [sampler],
-                     FX: [[AKPitchShifter(), AKCostelloReverb()]],
+                     FX: [[AKPitchShifter(), AKBooster(gain: 2.5), rev2]],
                      distThresh: distanceThresholds[0],
-                     pos: [0.3, -0.2, -1])
+                     pos: [0.4, -0.2, -1])
     
     flows.append(flow1)
     
@@ -135,7 +147,7 @@ class RoomAlien: Room {
     
     let flow2 = Flow(room: self,
                      gens: [sampler2],
-                     FX: [[AKPanner(), AKPitchShifter(), AKCostelloReverb()]],
+                     FX: [[AKPanner(), AKPitchShifter(), AKCostelloReverb(feedback: 0.8, cutoffFrequency: 2400)]],
                      distThresh: distanceThresholds[1],
                      pos: [0, 0.2, -1.5])
     
@@ -144,8 +156,10 @@ class RoomAlien: Room {
   }
   
   override func startFlows() {
-    flows[0].startGens()
-    flows[1].startGens()
+    if let sampler = flows[0].generators[0] as? AKWaveTable {
+      sampler.loopEnabled = true
+      sampler.play(from: 44100, to: (44100*18))
+    }
     
     if let sampler2 = flows[2].generators[0] as? AKWaveTable {
       sampler2.loopEnabled = false
@@ -194,14 +208,28 @@ class RoomAlien: Room {
     // flow 2
     
     let flow2 = flows[2]
-    let flow2Vol = 0.6
+    let flow2MaxVol = 0.7
+    let flow2Vol = 0.2
     let distance = flow2.calculateDist(pos: pos as! [Double])
-    flow2.genMixers[0].volume = distance < (flow2.distanceThreshold - 0.1) ? (flow2Vol + ((flow2.distanceThreshold - distance)/(flow2.distanceThreshold - 0.1)*(1-flow2Vol))) : max(0, ((flow2.distanceThreshold - distance)/0.1*flow2Vol))
+    flow2.genMixers[0].volume = distance < (flow2.distanceThreshold - 0.1) ? (flow2Vol + ((flow2.distanceThreshold - distance)/(flow2.distanceThreshold - 0.1)*(flow2MaxVol-flow2Vol))) : max(0, ((flow2.distanceThreshold - distance)/0.1*flow2Vol))
+    basePitch = 1.75 - distance
+    basePitchFactor = 0.875 + ((distanceThresholds[1] - distance)/2)
+    
+    if let pan = flows[2].effects[0][0] as? AKPanner {
+      pan.pan = pos[0] as! Double
+    }
   
   }
   
   
   func playSampler(){
+    var pitchshift = basePitchFactor * (Int.random(in: 0 ..< 10))
+    pitchshift += basePitch
+    
+    if let pitchShifter = flows[2].effects[0][1] as? AKPitchShifter {
+      pitchShifter.shift = pitchshift
+    }
+    
     if let sampler = flows[2].generators[0] as? AKWaveTable {
       sampler.play()
     }
