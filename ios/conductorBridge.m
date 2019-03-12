@@ -15,4 +15,6 @@ RCT_EXTERN_METHOD(setup)
 
 RCT_EXTERN_METHOD(updateAmp:(nonnull NSArray *)pos forward:(nonnull NSArray *)forward)
 
+RCT_EXTERN_METHOD(touchDown:(NSString *)location)
+
 @end

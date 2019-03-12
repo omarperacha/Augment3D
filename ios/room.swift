@@ -99,7 +99,7 @@ class RoomGuitar: Room {
 // MARK -- Alien Room
 class RoomAlien: Room {
   
-  private let distanceThresholds = [0.8, 1.4]
+  private let distanceThresholds = [0.8, 1.8]
   
   override init(){
     super.init()
@@ -128,6 +128,28 @@ class RoomAlien: Room {
     sampler.loopStartPoint = 0
     sampler.loopEndPoint = (44100 * 18)
     
+    let file2 = try! AKAudioFile(readFileName: "alien hi.m4a")
+    let sampler2 = AKWaveTable()
+    
+    sampler2.load(file: file2)
+    
+    let flow2 = Flow(room: self,
+                     gens: [sampler2],
+                     FX: [[AKPanner(), AKPitchShifter(), AKCostelloReverb()]],
+                     distThresh: distanceThresholds[1],
+                     pos: [0, 0.2, -1.5])
+    
+    flows.append(flow2)
+    
+  }
+  
+  override func startFlows() {
+    flows[0].startGens()
+    flows[1].startGens()
+    
+    if let sampler2 = flows[2].generators[0] as? AKWaveTable {
+      sampler2.loopEnabled = false
+    }
   }
   
   func updateFlows(pos: NSArray, yaw: Double, gravY: Double){
@@ -170,15 +192,24 @@ class RoomAlien: Room {
     }
     
     // flow 2
+    
+    let flow2 = flows[2]
+    let flow2Vol = 0.6
+    let distance = flow2.calculateDist(pos: pos as! [Double])
+    flow2.genMixers[0].volume = distance < (flow2.distanceThreshold - 0.1) ? (flow2Vol + ((flow2.distanceThreshold - distance)/(flow2.distanceThreshold - 0.1)*(1-flow2Vol))) : max(0, ((flow2.distanceThreshold - distance)/0.1*flow2Vol))
+  
   }
+  
   
   func playSampler(){
-    
+    if let sampler = flows[2].generators[0] as? AKWaveTable {
+      sampler.play()
+    }
   }
   
-  
-  
 }
+
+
 
 // MARK -- Room Superclass
 class Room {

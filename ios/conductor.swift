@@ -98,5 +98,15 @@ class Conductor: NSObject {
   
   }
   
+  @objc(touchDown:)
+  func touchDown(location: NSString){
+    print("000_ called, location: \(location)")
+    if location == "alien" {
+      if let roomAlien = rooms[1] as? RoomAlien {
+        roomAlien.playSampler()
+      }
+    }
+  }
+  
   
 }

@@ -25,6 +25,7 @@ export default class HelloWorldSceneAR extends Component {
     // bind 'this' to functions
     this._onInitialized = this._onInitialized.bind(this);
       this._update = this._update.bind(this);
+      this._onTouchAlien = this._onTouchAlien.bind(this)
   }
 
   render() {
@@ -32,7 +33,7 @@ export default class HelloWorldSceneAR extends Component {
             <ViroARScene onTrackingUpdated={this._onInitialized} onCameraTransformUpdate={this._update}>
             <ViroBox position={[0.3, -0.2, -1]} scale={[.3, .3, .3]} />
             <ViroBox position={[-0.3, -0.2, -1]} scale={[.3, .3, .3]} />
-            <ViroBox position={[0, 0.2, -1.8]} scale={[.3, .3, .3]} materials={["black"]} />
+            <ViroBox position={[0, 0.2, -1.8]} scale={[.3, .3, .3]} materials={["black"]} onClick={this._onTouchAlien} />
             <ViroBox position={[0, 0, -5]} scale={[.3, .3, .3]} />
       </ViroARScene>
     );
@@ -50,6 +51,11 @@ export default class HelloWorldSceneAR extends Component {
         const pos = cameraTransform.position;
         const forward = cameraTransform.forward;
         this.conductor.updateAmp(pos, forward);
+    }
+    
+    _onTouchAlien(position, source)  {
+        // user has clicked the object
+        this.conductor.touchDown("alien");
     }
     
 }
