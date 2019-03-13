@@ -96,12 +96,33 @@ class RoomGuitar: Room {
 }
 
 
+// MARK -- Bass Room
+class RoomBass: Room {
+  
+  private let distanceThresholds = [1.25]
+  
+  override init(){
+    super.init()
+    
+  }
+  
+  func updateFlows(pos: NSArray, yaw: Double, gravY: Double, forward: Double){
+    
+    if flows.count == 0 {
+      return
+    }
+    
+  }
+  
+  
+}
+
 // MARK -- Alien Room
 class RoomAlien: Room {
   
-  private let distanceThresholds = [1.1, 1.8]
+  private let distanceThresholds = [0.95, 1.8]
   private let revFB = 0.5
-  private let revCO = 1200.0
+  private let revCO = 1000.0
   
   private var basePitchFactor = 0.875
   private var basePitch = 0.0
@@ -137,9 +158,6 @@ class RoomAlien: Room {
     
     flows.append(flow1)
     
-    sampler.loopStartPoint = 0
-    sampler.loopEndPoint = (44100 * 18)
-    
     let file2 = try! AKAudioFile(readFileName: "alien hi.m4a")
     let sampler2 = AKWaveTable()
     
@@ -158,7 +176,7 @@ class RoomAlien: Room {
   override func startFlows() {
     if let sampler = flows[0].generators[0] as? AKWaveTable {
       sampler.loopEnabled = true
-      sampler.play(from: (44100 * 6), to: (44100*20))
+      sampler.play(from: 44100*6, to: 44100*20)
     }
     
     if let sampler2 = flows[2].generators[0] as? AKWaveTable {
