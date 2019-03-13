@@ -101,9 +101,24 @@ class RoomBass: Room {
   
   private let distanceThresholds = [1.25]
   
+  private var tables = [AKTable]()
+  
   override init(){
     super.init()
     
+    let table0 = AKTable(.sawtooth, phase: 0, count: 0)
+    tables.append(table0)
+    
+    let gen = AKMorphingOscillator(waveformArray: tables)
+    gen.frequency = 80
+    
+    let flow = Flow(room: self,
+                    gens: [gen],
+                    FX: [[AKPitchShifter(), AKKorgLowPassFilter()]],
+                    distThresh: distanceThresholds[0],
+                    pos: [0, -1.6, -1])
+    
+    flows.append(flow)
   }
   
   func updateFlows(pos: NSArray, yaw: Double, gravY: Double, forward: Double){

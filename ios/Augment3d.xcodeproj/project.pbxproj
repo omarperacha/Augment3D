@@ -36,6 +36,9 @@
 		2D16E6881FA4F8E400B85C8A /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D16E6891FA4F8E400B85C8A /* libReact.a */; };
 		2DCD954D1E0B4F2C00145EB5 /* Augment3dTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* Augment3dTests.m */; };
 		2DF0FFEE2056DD460020B375 /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3DAD3EA31DF850E9000B6D8A /* libReact.a */; };
+		5993934A2239BC4000DE77D6 /* AKWF_bitreduced_0006.wav in Resources */ = {isa = PBXBuildFile; fileRef = 599393242239BC4000DE77D6 /* AKWF_bitreduced_0006.wav */; };
+		5993934C2239BC4A00DE77D6 /* AKWF_ebass_0051.wav in Resources */ = {isa = PBXBuildFile; fileRef = 5993934B2239BC4A00DE77D6 /* AKWF_ebass_0051.wav */; };
+		5993934E2239BC5500DE77D6 /* AKWF_altosax_0020.wav in Resources */ = {isa = PBXBuildFile; fileRef = 5993934D2239BC5500DE77D6 /* AKWF_altosax_0020.wav */; };
 		59B9C492222A0527004BDB6F /* conductor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59B9C491222A0527004BDB6F /* conductor.swift */; };
 		59B9C4A0222A06D4004BDB6F /* conductorBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 59B9C49F222A06D4004BDB6F /* conductorBridge.m */; };
 		59E3722322348CD900C6D3D2 /* metal lo.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 59E371F822348CD900C6D3D2 /* metal lo.m4a */; };
@@ -356,6 +359,9 @@
 		2D02E47B1E0B4A5D006451C7 /* Augment3d-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Augment3d-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D02E4901E0B4A5D006451C7 /* Augment3d-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Augment3d-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D16E6891FA4F8E400B85C8A /* libReact.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libReact.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		599393242239BC4000DE77D6 /* AKWF_bitreduced_0006.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = AKWF_bitreduced_0006.wav; sourceTree = "<group>"; };
+		5993934B2239BC4A00DE77D6 /* AKWF_ebass_0051.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = AKWF_ebass_0051.wav; sourceTree = "<group>"; };
+		5993934D2239BC5500DE77D6 /* AKWF_altosax_0020.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = AKWF_altosax_0020.wav; sourceTree = "<group>"; };
 		59B9C490222A0526004BDB6F /* Augment3d-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Augment3d-Bridging-Header.h"; sourceTree = "<group>"; };
 		59B9C491222A0527004BDB6F /* conductor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = conductor.swift; sourceTree = "<group>"; };
 		59B9C49F222A06D4004BDB6F /* conductorBridge.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = conductorBridge.m; sourceTree = "<group>"; };
@@ -569,6 +575,9 @@
 				59E3722022348CD900C6D3D2 /* alien lo.m4a */,
 				59E3722222348CD900C6D3D2 /* death clock lo.wav */,
 				59E3721E22348CD900C6D3D2 /* metal hi.m4a */,
+				599393242239BC4000DE77D6 /* AKWF_bitreduced_0006.wav */,
+				5993934B2239BC4A00DE77D6 /* AKWF_ebass_0051.wav */,
+				5993934D2239BC5500DE77D6 /* AKWF_altosax_0020.wav */,
 				59E371F822348CD900C6D3D2 /* metal lo.m4a */,
 				59EEB8F3222C4D550089C065 /* Locked bass IR_1.wav */,
 			);
@@ -1126,12 +1135,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				59E3722D22348CD900C6D3D2 /* death clock lo.wav in Resources */,
+				5993934A2239BC4000DE77D6 /* AKWF_bitreduced_0006.wav in Resources */,
 				59E3722922348CD900C6D3D2 /* alien lo.m4a in Resources */,
 				59E3722522348CD900C6D3D2 /* metal hi.m4a in Resources */,
+				5993934E2239BC5500DE77D6 /* AKWF_altosax_0020.wav in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				59EEB919222C4D550089C065 /* Locked bass IR_1.wav in Resources */,
 				59E3722322348CD900C6D3D2 /* metal lo.m4a in Resources */,
 				59E3722B22348CD900C6D3D2 /* alien hi.m4a in Resources */,
+				5993934C2239BC4A00DE77D6 /* AKWF_ebass_0051.wav in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
