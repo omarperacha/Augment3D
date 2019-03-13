@@ -99,15 +99,15 @@ class RoomGuitar: Room {
 // MARK -- Alien Room
 class RoomAlien: Room {
   
-  private let distanceThresholds = [0.9, 1.8]
+  private let distanceThresholds = [1.1, 1.8]
+  private let revFB = 0.5
+  private let revCO = 1200.0
+  
   private var basePitchFactor = 0.875
   private var basePitch = 0.0
   
   override init(){
     super.init()
-    
-    let revFB = 0.4
-    let revCO = 1200.0
     
     let file = try! AKAudioFile(readFileName: "alien lo.m4a")
     let sampler = AKWaveTable()
@@ -121,7 +121,7 @@ class RoomAlien: Room {
       gens: [sampler],
       FX: [[AKPitchShifter(), AKBooster(gain: 2.5), rev]],
       distThresh: distanceThresholds[0],
-      pos: [-0.4, -0.2, -1])
+      pos: [-0.5, -0.2, -1])
     
     flows.append(flow0)
     
@@ -133,7 +133,7 @@ class RoomAlien: Room {
                      gens: [sampler],
                      FX: [[AKPitchShifter(), AKBooster(gain: 2.5), rev2]],
                      distThresh: distanceThresholds[0],
-                     pos: [0.4, -0.2, -1])
+                     pos: [0.5, -0.2, -1])
     
     flows.append(flow1)
     
@@ -158,7 +158,7 @@ class RoomAlien: Room {
   override func startFlows() {
     if let sampler = flows[0].generators[0] as? AKWaveTable {
       sampler.loopEnabled = true
-      sampler.play(from: 44100, to: (44100*18))
+      sampler.play(from: (44100 * 6), to: (44100*20))
     }
     
     if let sampler2 = flows[2].generators[0] as? AKWaveTable {
@@ -177,8 +177,12 @@ class RoomAlien: Room {
     for flow in flows[0...1]{
       currentFlow += 1
       let distance = flow.calculateDist(pos: pos as! [Double])
+      let dist2 = flows[2].calculateDist(pos: pos as! [Double])
     
       flow.genMixers[0].volume = (1 - (distance/(flow.distanceThreshold)))
+      if let rev = flow.effects[0][2] as? AKCostelloReverb {
+        rev.cutoffFrequency = revCO + ((distanceThresholds[1] - dist2) * (2*revCO))
+      }
       
       var _yaw = yaw
       if gravY > 0 {
@@ -218,6 +222,7 @@ class RoomAlien: Room {
     if let pan = flows[2].effects[0][0] as? AKPanner {
       pan.pan = pos[0] as! Double
     }
+    
   
   }
   
