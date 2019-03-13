@@ -9,6 +9,7 @@ import {
   ViroText,
   ViroConstants,
     ViroBox,
+    ViroPolyline,
     ViroSphere,
     ViroMaterials
 } from 'react-viro';
@@ -32,10 +33,14 @@ export default class HelloWorldSceneAR extends Component {
   render() {
     return (
             <ViroARScene onTrackingUpdated={this._onInitialized} onCameraTransformUpdate={this._update}>
-            <ViroSphere position={[0.6, -0.2, -1]} radius={.25} />
-            <ViroSphere position={[-0.6, -0.2, -1]} radius={.25} />
-            <ViroSphere position={[0, 0.2, -1.8]} radius={.15} materials={["black"]} onClick={this._onTouchAlien} />
-            <ViroBox position={[0, 0, -5]} scale={[.3, .3, .3]} />
+            < // bass
+            ViroPolyline position={[0, -1.6, -1]} points={[[-.5,0,-.5], [0,.5,0], [.5,0,-.5], [0,.5,-1], [-.5,0,-.5]]} thickness={0.1} />
+            < // alien
+            ViroSphere position={[0.6, -0.2, -3]} radius={.25} />
+            <ViroSphere position={[-0.6, -0.2, -3]} radius={.25} />
+            <ViroSphere position={[0, 0.2, -3.8]} radius={.15} materials={["black"]} onClick={this._onTouchAlien} />
+            < // conv
+            ViroBox position={[0, 0, -5]} scale={[.3, .3, .3]} />
       </ViroARScene>
     );
   }

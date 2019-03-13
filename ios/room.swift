@@ -142,7 +142,7 @@ class RoomAlien: Room {
       gens: [sampler],
       FX: [[AKPitchShifter(), AKBooster(gain: 2.5), rev]],
       distThresh: distanceThresholds[0],
-      pos: [-0.5, -0.2, -1])
+      pos: [-0.5, -0.2, -3])
     
     flows.append(flow0)
     
@@ -154,7 +154,7 @@ class RoomAlien: Room {
                      gens: [sampler],
                      FX: [[AKPitchShifter(), AKBooster(gain: 2.5), rev2]],
                      distThresh: distanceThresholds[0],
-                     pos: [0.5, -0.2, -1])
+                     pos: [0.5, -0.2, -3])
     
     flows.append(flow1)
     
@@ -167,7 +167,7 @@ class RoomAlien: Room {
                      gens: [sampler2],
                      FX: [[AKPanner(), AKPitchShifter(), AKCostelloReverb(feedback: 0.8, cutoffFrequency: 2400)]],
                      distThresh: distanceThresholds[1],
-                     pos: [0, 0.2, -1.5])
+                     pos: [0, 0.2, -3.8])
     
     flows.append(flow2)
     
