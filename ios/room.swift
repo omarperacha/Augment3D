@@ -99,22 +99,32 @@ class RoomGuitar: Room {
 // MARK -- Bass Room
 class RoomBass: Room {
   
-  private let distanceThresholds = [1.25]
+  private let distanceThresholds = [1.8]
   
   private var tables = [AKTable]()
   
   override init(){
     super.init()
     
-    let table0 = AKTable(.sawtooth, phase: 0, count: 0)
+    let table0 = AKTable(.sawtooth)
     tables.append(table0)
+    let table1 = AKTable(.square)
+    tables.append(table1)
+    let table2 = AKTable(.reverseSawtooth)
+    tables.append(table2)
+    let table3 = AKTable(.square)
+    tables.append(table3)
     
     let gen = AKMorphingOscillator(waveformArray: tables)
-    gen.frequency = 80
+    gen.frequency = 60
+    
+    let gen2 = AKOscillator()
+    gen2.frequency = 30
+    gen2.amplitude = 0.2
     
     let flow = Flow(room: self,
-                    gens: [gen],
-                    FX: [[AKPitchShifter(), AKKorgLowPassFilter()]],
+                    gens: [gen, gen2],
+                    FX: [[AKPitchShifter(), AKKorgLowPassFilter(cutoffFrequency: 30, resonance: 1.8, saturation: 1.1), AKCostelloReverb()]],
                     distThresh: distanceThresholds[0],
                     pos: [0, -1.6, -1])
     
@@ -126,7 +136,48 @@ class RoomBass: Room {
     if flows.count == 0 {
       return
     }
+    let flow = flows[0]
     
+    let vol = 0.5
+    let distance = flow.calculateDist(pos: pos as! [Double])
+    
+    if let gen = flow.generators[0] as? AKMorphingOscillator {
+      gen.index = (1 + (forward))
+    }
+    
+    flow.genMixers[0].volume = distance < (flow.distanceThreshold - 0.2) ? vol : max(0, ((flow.distanceThreshold - distance)/0.2*vol))
+    
+    var _yaw = yaw
+    if gravY > 0 {
+      let negative = (yaw < 0)
+      
+      if negative {
+        _yaw = -1 - (abs(gravY))
+      } else {
+        _yaw = 1 + (abs(gravY))
+      }
+      
+      _yaw *= 0.875
+    }
+    
+    if let pitch = flow.effects[0][0] as? AKPitchShifter {
+      pitch.shift = _yaw
+    }
+    
+    if let filter = flow.effects[0][1] as? AKKorgLowPassFilter {
+      filter.cutoffFrequency = 30 + ((distanceThresholds[0] - distance) * 50)
+    }
+    
+  }
+  
+  override func startFlows() {
+    super.startFlows()
+    if let revDW = flows[0].drywets[0].last {
+      revDW.balance = 0.3
+    }
+    if let gen = flows[0].generators[0] as? AKMorphingOscillator {
+      gen.start()
+    }
   }
   
   
@@ -238,8 +289,6 @@ class RoomAlien: Room {
       if let pitchShift = flow.effects[0][0] as? AKPitchShifter {
         pitchShift.shift = _yaw
       }
-      
-      
     }
     
     // flow 2

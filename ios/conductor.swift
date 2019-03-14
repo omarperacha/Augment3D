@@ -90,6 +90,11 @@ class Conductor: NSObject {
       return
     }
     
+    lock.lock()
+    defer {
+      lock.unlock()
+    }
+    
     if let roomConv = rooms[0] as? RoomConv {
       roomConv.updateFlows(pos: pos, yaw: gravX, gravY: gravY)
     }
@@ -106,7 +111,11 @@ class Conductor: NSObject {
   
   @objc(touchDown:)
   func touchDown(location: NSString){
-    print("000_ called, location: \(location)")
+    
+    if rooms.count <= 0 {
+      return
+    }
+    
     if location == "alien" {
       if let roomAlien = rooms[1] as? RoomAlien {
         roomAlien.playSampler()
