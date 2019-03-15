@@ -106,11 +106,21 @@ class RoomBass: Room {
   override init(){
     super.init()
     
-    let table0 = AKTable(.sawtooth)
+    let fileUrl = Bundle(for: type(of: self)).url(forResource: "death clock lo", withExtension:"wav")
+    let file = try! AKAudioFile(forReading: fileUrl!)
+    
+    
+    let table0 = AKTable(.zero)
+    for i in 0..<table0.count {
+      table0[i] = file.floatChannelData![0][i + 88200]
+    }
     tables.append(table0)
     let table1 = AKTable(.square)
     tables.append(table1)
-    let table2 = AKTable(.reverseSawtooth)
+    let table2 = AKTable(.zero)
+    for i in 0..<table2.count {
+      table2[i] = AKTable.Element(random(in: -1...1))
+    }
     tables.append(table2)
     let table3 = AKTable(.square)
     tables.append(table3)
@@ -124,7 +134,10 @@ class RoomBass: Room {
     
     let flow = Flow(room: self,
                     gens: [gen, gen2],
-                    FX: [[AKPitchShifter(), AKKorgLowPassFilter(cutoffFrequency: 30, resonance: 1.8, saturation: 1.1), AKCostelloReverb()]],
+                    FX: [[AKPitchShifter(),
+                          AKKorgLowPassFilter(cutoffFrequency: 30, resonance: 1.4, saturation: 1.1),
+                      AKBooster(gain: 3),
+                      AKCostelloReverb()]],
                     distThresh: distanceThresholds[0],
                     pos: [0, -1.6, -1])
     
@@ -165,7 +178,7 @@ class RoomBass: Room {
     }
     
     if let filter = flow.effects[0][1] as? AKKorgLowPassFilter {
-      filter.cutoffFrequency = 30 + ((distanceThresholds[0] - distance) * 50)
+      filter.cutoffFrequency = 30 + ((distanceThresholds[0] - distance) * 2000)
     }
     
   }
@@ -242,7 +255,9 @@ class RoomAlien: Room {
   override func startFlows() {
     if let sampler = flows[0].generators[0] as? AKWaveTable {
       sampler.loopEnabled = true
-      sampler.play(from: 44100*6, to: 44100*20)
+      sampler.play(from: 0, to: 44100*14)
+      sampler.loopStartPoint = 44100*8
+      sampler.loopEndPoint = 44100*14
     }
     
     if let sampler2 = flows[2].generators[0] as? AKWaveTable {
