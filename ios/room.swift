@@ -301,14 +301,14 @@ class RoomAlien: Room {
       //do pulse
       } else if pulseStep == 0 && random(in: 0...1) > pulseProb {
         pulseStep += 1
-        sampler.volume += 0.1
-        
+        sampler.volume += 0.05
+        print("000_ start pulse!")
       //continue pulse
       } else if pulseStep != 0 {
         pulseStep = (pulseStep + 1) % 20
         let _pulseStep = pulseStep > 10 ? (20 - pulseStep) : pulseStep
-        sampler.volume = 1 + (_pulseStep/10)
-        
+        sampler.volume = 1 + (_pulseStep/20)
+        print("vol: \(sampler.volume)")
       //default
       } else if sampler.volume != 1 {
         sampler.volume = 1
