@@ -122,7 +122,7 @@ class RoomBass: Room {
     }
     table0.invert()
     tables.append(table0)
-    let table1 = AKTable(.square)
+    let table1 = AKTable(.triangle)
     tables.append(table1)
     let table2 = AKTable(.zero)
     for i in 0..<table2.count {
@@ -208,7 +208,7 @@ class RoomBass: Room {
 class RoomAlien: Room {
   
   private let distanceThresholds = [0.95, 1.8]
-  private let revFB = 0.5
+  private let revFB = 0.6
   private let revCO = 1000.0
   
   private var basePitchFactor = 0.875
@@ -227,7 +227,7 @@ class RoomAlien: Room {
     
     let flow0 = Flow(room: self,
       gens: [sampler],
-      FX: [[AKPitchShifter(), AKBooster(gain: 2.5), rev]],
+      FX: [[AKPitchShifter(), AKBooster(gain: 3), rev]],
       distThresh: distanceThresholds[0],
       pos: [-0.5, -0.2, -3])
     
@@ -239,7 +239,7 @@ class RoomAlien: Room {
     
     let flow1 = Flow(room: self,
                      gens: [sampler],
-                     FX: [[AKPitchShifter(), AKBooster(gain: 2.5), rev2]],
+                     FX: [[AKPitchShifter(), AKBooster(gain: 3), rev2]],
                      distThresh: distanceThresholds[0],
                      pos: [0.5, -0.2, -3])
     
@@ -263,9 +263,11 @@ class RoomAlien: Room {
   override func startFlows() {
     if let sampler = flows[0].generators[0] as? AKWaveTable {
       sampler.loopEnabled = true
-      sampler.play(from: 0, to: 44100*14)
-      sampler.loopStartPoint = 44100*8
-      sampler.loopEndPoint = 44100*14
+    
+      sampler.play(from: 0, to: 44100*36)
+      sampler.loopStartPoint = 44100
+      sampler.loopEndPoint = 44100*36
+ 
     }
     
     if let sampler2 = flows[2].generators[0] as? AKWaveTable {
@@ -280,6 +282,25 @@ class RoomAlien: Room {
     }
     
     // flows 0 && 1
+    
+    if let sampler = flows[0].generators[0] as? AKWaveTable {
+      let fadelength = 0.05
+      
+      //fadeout
+      if sampler.position > (4*(Double(sampler.loopEndPoint) - 16*fadelength*44100)) {
+        sampler.volume = max(0.01, 2*((Double(4*sampler.loopEndPoint) - sampler.position)/(16*fadelength*44100))-7)
+      
+      //fadein
+      } else if sampler.position < (4*(Double(sampler.loopStartPoint) + 2*fadelength*44100)) {
+        sampler.volume = max(0.01, -1 * ((Double(4*sampler.loopStartPoint) - sampler.position)/(8*fadelength*44100)))
+        
+      //default
+      } else if sampler.volume != 1 {
+        sampler.volume = 1
+      }
+      
+    }
+    
     var currentFlow = -1
     for flow in flows[0...1]{
       currentFlow += 1
@@ -288,7 +309,7 @@ class RoomAlien: Room {
     
       flow.genMixers[0].volume = (1 - (distance/(flow.distanceThreshold)))
       if let rev = flow.effects[0][2] as? AKCostelloReverb {
-        rev.cutoffFrequency = revCO + ((distanceThresholds[1] - dist2) * (2*revCO))
+        rev.cutoffFrequency = revCO + ((distanceThresholds[1] - dist2) * (3*revCO))
       }
       
       var _yaw = yaw
