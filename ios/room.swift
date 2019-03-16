@@ -208,14 +208,15 @@ class RoomBass: Room {
 class RoomAlien: Room {
   
   private let distanceThresholds = [0.95, 1.8]
-  private let delFB = 0.22
+  private let delFB = 0.18
   private let delLP = 1000.0
+  private let delT = 1.75
   private let boost = 3.0
+  private let fadelength = 0.2
   
-  private var pulseStep = 0
-  private var pulseProb = 0.99
   private var basePitchFactor = 0.875
   private var basePitch = 0.0
+  private var fadeDue = "Out"
   
   override init(){
     super.init()
@@ -224,6 +225,7 @@ class RoomAlien: Room {
     let sampler = AKWaveTable()
     let del = AKDelay()
     del.lowPassCutoff = delLP
+    del.time = delT
     
     sampler.load(file: file)
     
@@ -237,6 +239,7 @@ class RoomAlien: Room {
     
     let del2 = AKDelay()
     del2.lowPassCutoff = delLP
+    del2.time = delT
     
     let flow1 = Flow(room: self,
                      gens: [sampler],
@@ -264,10 +267,12 @@ class RoomAlien: Room {
   override func startFlows() {
     if let sampler = flows[0].generators[0] as? AKWaveTable {
       sampler.loopEnabled = true
-    
-      sampler.play(from: 0, to: 44100*36)
       sampler.loopStartPoint = 44100*6
-      sampler.loopEndPoint = 44100*28
+      sampler.loopEndPoint = 44100*18
+      sampler.rampDuration = fadelength
+      sampler.play(from: 0, to: 44100*18)
+      
+      
     }
     
     if let sampler2 = flows[2].generators[0] as? AKWaveTable {
@@ -288,27 +293,15 @@ class RoomAlien: Room {
     // flows 0 && 1
     
     if let sampler = flows[0].generators[0] as? AKWaveTable {
-      let fadelength = 0.05
       
       //fadeout
-      if sampler.position > (4*(Double(sampler.loopEndPoint) - 16*fadelength*44100)) {
-        sampler.volume = max(0.01, 2*((Double(4*sampler.loopEndPoint) - sampler.position)/(16*fadelength*44100))-7)
-      pulseStep = 0
+      if sampler.position > (4*(Double(sampler.loopEndPoint) - 16*fadelength*44100)) && fadeDue == "Out" {
+        sampler.volume = 0
+        fadeDue = "In"
       //fadein
-      } else if sampler.position < (4*(Double(sampler.loopStartPoint) + 2*fadelength*44100)) {
-        sampler.volume = max(0.01, -1 * ((Double(4*sampler.loopStartPoint) - sampler.position)/(8*fadelength*44100)))
-      pulseStep = 0
-      //do pulse
-      } else if pulseStep == 0 && random(in: 0...1) > pulseProb {
-        pulseStep += 1
-        sampler.volume += 0.05
-        print("000_ start pulse!")
-      //continue pulse
-      } else if pulseStep != 0 {
-        pulseStep = (pulseStep + 1) % 20
-        let _pulseStep = pulseStep > 10 ? (20 - pulseStep) : pulseStep
-        sampler.volume = 1 + (_pulseStep/20)
-        print("vol: \(sampler.volume)")
+      } else if sampler.position < (4*(Double(sampler.loopStartPoint) + 2*fadelength*44100)) && fadeDue == "In" {
+        sampler.volume = 1
+        fadeDue = "Out"
       //default
       } else if sampler.volume != 1 {
         sampler.volume = 1
@@ -340,7 +333,6 @@ class RoomAlien: Room {
       
       if currentFlow == 0 {
         _yaw -= 1.75
-        pulseProb = distance/(distanceThresholds[0]) + 0.66
       } else if currentFlow == 1 {
         _yaw *= -1
         _yaw += 1.75
