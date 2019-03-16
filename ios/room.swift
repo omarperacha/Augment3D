@@ -208,9 +208,12 @@ class RoomBass: Room {
 class RoomAlien: Room {
   
   private let distanceThresholds = [0.95, 1.8]
-  private let revFB = 0.6
-  private let revCO = 1000.0
+  private let delFB = 0.22
+  private let delLP = 1000.0
+  private let boost = 3.0
   
+  private var pulseStep = 0
+  private var pulseProb = 0.99
   private var basePitchFactor = 0.875
   private var basePitch = 0.0
   
@@ -219,27 +222,25 @@ class RoomAlien: Room {
     
     let file = try! AKAudioFile(readFileName: "alien lo.m4a")
     let sampler = AKWaveTable()
-    let rev = AKCostelloReverb()
-    rev.feedback = revFB
-    rev.cutoffFrequency = revCO
+    let del = AKDelay()
+    del.lowPassCutoff = delLP
     
     sampler.load(file: file)
     
     let flow0 = Flow(room: self,
       gens: [sampler],
-      FX: [[AKPitchShifter(), AKBooster(gain: 3), rev]],
+      FX: [[AKPitchShifter(), AKBooster(gain: boost), del]],
       distThresh: distanceThresholds[0],
       pos: [-0.5, -0.2, -3])
     
     flows.append(flow0)
     
-    let rev2 = AKCostelloReverb()
-    rev2.feedback = revFB
-    rev2.cutoffFrequency = revCO
+    let del2 = AKDelay()
+    del2.lowPassCutoff = delLP
     
     let flow1 = Flow(room: self,
                      gens: [sampler],
-                     FX: [[AKPitchShifter(), AKBooster(gain: 3), rev2]],
+                     FX: [[AKPitchShifter(), AKBooster(gain: boost), del2]],
                      distThresh: distanceThresholds[0],
                      pos: [0.5, -0.2, -3])
     
@@ -265,14 +266,17 @@ class RoomAlien: Room {
       sampler.loopEnabled = true
     
       sampler.play(from: 0, to: 44100*36)
-      sampler.loopStartPoint = 44100
-      sampler.loopEndPoint = 44100*36
- 
+      sampler.loopStartPoint = 44100*6
+      sampler.loopEndPoint = 44100*28
     }
     
     if let sampler2 = flows[2].generators[0] as? AKWaveTable {
       sampler2.loopEnabled = false
     }
+    
+    flows[0].drywets[0][2].balance = delFB
+    flows[1].drywets[0][2].balance = delFB
+    
   }
   
   func updateFlows(pos: NSArray, yaw: Double, gravY: Double){
@@ -289,10 +293,21 @@ class RoomAlien: Room {
       //fadeout
       if sampler.position > (4*(Double(sampler.loopEndPoint) - 16*fadelength*44100)) {
         sampler.volume = max(0.01, 2*((Double(4*sampler.loopEndPoint) - sampler.position)/(16*fadelength*44100))-7)
-      
+      pulseStep = 0
       //fadein
       } else if sampler.position < (4*(Double(sampler.loopStartPoint) + 2*fadelength*44100)) {
         sampler.volume = max(0.01, -1 * ((Double(4*sampler.loopStartPoint) - sampler.position)/(8*fadelength*44100)))
+      pulseStep = 0
+      //do pulse
+      } else if pulseStep == 0 && random(in: 0...1) > pulseProb {
+        pulseStep += 1
+        sampler.volume += 0.1
+        
+      //continue pulse
+      } else if pulseStep != 0 {
+        pulseStep = (pulseStep + 1) % 20
+        let _pulseStep = pulseStep > 10 ? (20 - pulseStep) : pulseStep
+        sampler.volume = 1 + (_pulseStep/10)
         
       //default
       } else if sampler.volume != 1 {
@@ -308,8 +323,8 @@ class RoomAlien: Room {
       let dist2 = flows[2].calculateDist(pos: pos as! [Double])
     
       flow.genMixers[0].volume = (1 - (distance/(flow.distanceThreshold)))
-      if let rev = flow.effects[0][2] as? AKCostelloReverb {
-        rev.cutoffFrequency = revCO + ((distanceThresholds[1] - dist2) * (3*revCO))
+      if let del = flow.effects[0][2] as? AKDelay {
+        del.lowPassCutoff = delLP + ((distanceThresholds[1] - dist2) * (3*delLP))
       }
       
       var _yaw = yaw
@@ -325,6 +340,7 @@ class RoomAlien: Room {
       
       if currentFlow == 0 {
         _yaw -= 1.75
+        pulseProb = distance/(distanceThresholds[0]) + 0.66
       } else if currentFlow == 1 {
         _yaw *= -1
         _yaw += 1.75
