@@ -98,7 +98,7 @@ class Conductor: NSObject {
     }
     
     if let roomConv = rooms[0] as? RoomConv {
-      roomConv.updateFlows(pos: pos, yaw: gravX, gravY: gravY)
+      roomConv.updateFlows(pos: pos, yaw: gravX, gravY: gravY, forward: forward[2] as! Double)
     }
     
     if let roomAlien = rooms[1] as? RoomAlien {

@@ -23,9 +23,13 @@ class RoomConv: Room {
     let convHP = AKHighPassFilter(nil, cutoffFrequency: 200, resonance: 0)
     let convReduce = AKBooster(nil, gain: -2)
     
+    let table0 = AKTable(.sine)
+    let table1 = AKTable(.triangle)
+    let tables = [table0, table0, table1, table1]
+    
     let flow0 = Flow(room: self,
                      //to do - make gen morphing oscillator
-                     gens: [AKOscillator()],
+                     gens: [AKMorphingOscillator(waveformArray: tables)],
                      FX: [[conv, convHP, convReduce, AKPeakLimiter()]],
                      distThresh: distanceThresholds[0],
                      pos: [0, 0, -5])
@@ -34,17 +38,17 @@ class RoomConv: Room {
     
   }
   
-  func updateFlows(pos: NSArray, yaw: Double, gravY: Double){
+  func updateFlows(pos: NSArray, yaw: Double, gravY: Double, forward: Double){
     
     if flows.count == 0 {
       return
     }
     
-    updateFlow0(pos: pos, yaw: yaw, gravY: gravY)
+    updateFlow0(pos: pos, yaw: yaw, gravY: gravY, forward: forward)
     
   }
   
-  private func updateFlow0(pos: NSArray, yaw: Double, gravY: Double){
+  private func updateFlow0(pos: NSArray, yaw: Double, gravY: Double, forward: Double){
     
     let flow = flows[0]
     let sinVol = 0.3
@@ -53,8 +57,9 @@ class RoomConv: Room {
     let gen = flow.generators[0]
     flow.genMixers[0].volume = distance < (flow.distanceThreshold - 0.1) ? sinVol : max(0, ((flow.distanceThreshold - distance)/0.1*sinVol))
     
-    if let osc = gen as? AKOscillator {
+    if let osc = gen as? AKMorphingOscillator {
       osc.frequency = 30 + 970 * (1 - (distance/(flow.distanceThreshold)))
+      osc.index = (1 + forward) * 1.5
     }
     
     var _yaw = yaw
@@ -73,6 +78,7 @@ class RoomConv: Room {
   }
   
 }
+
 
 // MARK -- Guitar Room
 class RoomGuitar: Room {
@@ -114,6 +120,7 @@ class RoomBass: Room {
     for i in 0..<table0.count {
       table0[i] = file.floatChannelData![0][i + 88200]
     }
+    table0.invert()
     tables.append(table0)
     let table1 = AKTable(.square)
     tables.append(table1)
@@ -126,16 +133,16 @@ class RoomBass: Room {
     tables.append(table3)
     
     let gen = AKMorphingOscillator(waveformArray: tables)
-    gen.frequency = 60
+    gen.frequency = 53.434
     
     let gen2 = AKOscillator()
-    gen2.frequency = 30
+    gen2.frequency = (gen.frequency/2)
     gen2.amplitude = 0.2
     
     let flow = Flow(room: self,
                     gens: [gen, gen2],
                     FX: [[AKPitchShifter(),
-                          AKKorgLowPassFilter(cutoffFrequency: 30, resonance: 1.4, saturation: 1.1),
+                          AKKorgLowPassFilter(cutoffFrequency: 30, resonance: 1.4),
                       AKBooster(gain: 1),
                       AKCostelloReverb()]],
                     distThresh: distanceThresholds[0],
@@ -195,6 +202,7 @@ class RoomBass: Room {
   
   
 }
+
 
 // MARK -- Alien Room
 class RoomAlien: Room {
@@ -313,7 +321,7 @@ class RoomAlien: Room {
     let flow2Vol = 0.2
     let distance = flow2.calculateDist(pos: pos as! [Double])
     flow2.genMixers[0].volume = distance < (flow2.distanceThreshold - 0.1) ? (flow2Vol + ((flow2.distanceThreshold - distance)/(flow2.distanceThreshold - 0.1)*(flow2MaxVol-flow2Vol))) : max(0, ((flow2.distanceThreshold - distance)/0.1*flow2Vol))
-    basePitch = 1.75 - distance
+    basePitch = 5.25 - distance
     basePitchFactor = 0.875 + ((distanceThresholds[1] - distance)/2)
     
     if let pan = flows[2].effects[0][0] as? AKPanner {
@@ -325,7 +333,7 @@ class RoomAlien: Room {
   
   
   func playSampler(){
-    var pitchshift = basePitchFactor * (Int.random(in: 0 ..< 10))
+    var pitchshift = basePitchFactor * (Int.random(in: 0 ..< 4))
     pitchshift += basePitch
     
     if let pitchShifter = flows[2].effects[0][1] as? AKPitchShifter {
@@ -343,7 +351,7 @@ class RoomAlien: Room {
 // MARK -- Pure Room
 class RoomPure: Room {
   
-  let distanceThresholds = [1.8]
+  let distanceThresholds = [1.0]
   
   override init() {
     super.init()

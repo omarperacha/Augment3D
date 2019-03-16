@@ -84,6 +84,8 @@ class Flow {
     for generator in generators {
       if let gen = generator as? AKOscillator {
         gen.start()
+      } else if let gen = generator as? AKMorphingOscillator {
+        gen.start()
       } else if let gen = generator as? AKWaveTable {
         gen.loopEnabled = true
         gen.start()
