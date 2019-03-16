@@ -33,8 +33,10 @@ export default class HelloWorldSceneAR extends Component {
   render() {
     return (
             <ViroARScene onTrackingUpdated={this._onInitialized} onCameraTransformUpdate={this._update}>
+            < // pure
+            ViroPolyline position={[0, 0, -1]} points={[[0,-1,0], [0,1,0.15]]} thickness={0.2} />
             < // bass
-            ViroPolyline position={[0, -1.6, -1]} points={[[-.5,0,-.5], [0,.5,0], [.5,0,-.5], [0,.5,-1], [-.5,0,-.5]]} thickness={0.1} />
+            ViroPolyline position={[-2, -1.6, -1]} points={[[-.5,0,-.5], [0,.5,0], [.5,0,-.5], [0,.5,-1], [-.5,0,-.5]]} thickness={0.1} />
             < // alien
             ViroSphere position={[0.6, -0.2, -3]} radius={.25} />
             <ViroSphere position={[-0.6, -0.2, -3]} radius={.25} />

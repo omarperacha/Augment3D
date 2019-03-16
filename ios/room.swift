@@ -136,10 +136,10 @@ class RoomBass: Room {
                     gens: [gen, gen2],
                     FX: [[AKPitchShifter(),
                           AKKorgLowPassFilter(cutoffFrequency: 30, resonance: 1.4, saturation: 1.1),
-                      AKBooster(gain: 3),
+                      AKBooster(gain: 1),
                       AKCostelloReverb()]],
                     distThresh: distanceThresholds[0],
-                    pos: [0, -1.6, -1])
+                    pos: [-2, -1.6, -1])
     
     flows.append(flow)
   }
@@ -337,6 +337,66 @@ class RoomAlien: Room {
     }
   }
   
+}
+
+
+// MARK -- Pure Room
+class RoomPure: Room {
+  
+  let distanceThresholds = [1.8]
+  
+  override init() {
+    super.init()
+    
+    
+    let noise = AKWhiteNoise()
+    
+    let flow1 = Flow(room: self,
+                     gens: [noise],
+                     FX: [[AKKorgLowPassFilter(cutoffFrequency: 30, resonance: 1.4, saturation: 1.1)]],
+                     distThresh: self.distanceThresholds[0], pos: [0, 0, -1])
+    flows.append(flow1)
+  }
+  
+  func updateFlows(pos: NSArray, yaw: Double, gravY: Double, forward: Double){
+    
+    if flows.count == 0 {
+      return
+    }
+    
+    let flow = flows[0]
+    
+    let vol = 0.5
+    let distance = flow.calculateDist(pos: pos as! [Double])
+    
+    flow.genMixers[0].volume = (distance < (flow.distanceThreshold - 0.2) ? vol : max(0, ((flow.distanceThreshold - distance)/0.2*vol)))*(forward)
+    
+    if let filter = flow.effects[0][0] as? AKKorgLowPassFilter {
+      filter.cutoffFrequency = 30 + ((distanceThresholds[0] - distance) * 2000)
+    }
+    
+    var _yaw = yaw
+    if gravY > 0 {
+      let negative = (yaw < 0)
+      
+      if negative {
+        _yaw = -1 - (abs(gravY))
+      } else {
+        _yaw = 1 + (abs(gravY))
+      }
+      
+      _yaw *= 0.875
+    }
+    
+  }
+  
+  override func startFlows() {
+    super.startFlows()
+    
+    if let noise = flows[0].generators[0] as? AKWhiteNoise {
+      noise.start()
+    }
+  }
 }
 
 
