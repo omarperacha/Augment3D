@@ -212,7 +212,7 @@ class RoomAlien: Room {
   private let delLP = 1000.0
   private let delT = 1.75
   private let boost = 3.0
-  private let fadelength = 0.15
+  private let fadelength = 0.5
   
   private var basePitchFactor = 0.875
   private var basePitch = 0.0
