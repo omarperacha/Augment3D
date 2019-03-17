@@ -208,11 +208,11 @@ class RoomBass: Room {
 class RoomAlien: Room {
   
   private let distanceThresholds = [0.95, 1.8]
-  private let delFB = 0.18
+  private let delFB = 0.22
   private let delLP = 1000.0
   private let delT = 1.75
   private let boost = 3.0
-  private let fadelength = 0.2
+  private let fadelength = 0.15
   
   private var basePitchFactor = 0.875
   private var basePitch = 0.0
@@ -269,7 +269,6 @@ class RoomAlien: Room {
       sampler.loopEnabled = true
       sampler.loopStartPoint = 44100*6
       sampler.loopEndPoint = 44100*18
-      sampler.rampDuration = fadelength
       sampler.play(from: 0, to: 44100*18)
       
       
@@ -293,19 +292,25 @@ class RoomAlien: Room {
     // flows 0 && 1
     
     if let sampler = flows[0].generators[0] as? AKWaveTable {
-      
       //fadeout
-      if sampler.position > (4*(Double(sampler.loopEndPoint) - 16*fadelength*44100)) && fadeDue == "Out" {
-        sampler.volume = 0
-        fadeDue = "In"
+      if sampler.position > (3*(Double(sampler.loopEndPoint) - 2*fadelength*44100)) {
+        sampler.volume = max(0, -1 + (3*(Double(sampler.loopEndPoint)) - sampler.position)/(1.5*2*fadelength*44100))
+        setDel(val: 1 - sampler.volume)
+        print("000_ out \(sampler.volume)")
+        
+        
       //fadein
-      } else if sampler.position < (4*(Double(sampler.loopStartPoint) + 2*fadelength*44100)) && fadeDue == "In" {
-        sampler.volume = 1
-        fadeDue = "Out"
-      //default
-      } else if sampler.volume != 1 {
-        sampler.volume = 1
-      }
+      } else if sampler.position < (3*(Double(sampler.loopStartPoint) + 2*fadelength*44100)) {
+         sampler.volume = max(0, -1 * ((3*(Double(sampler.loopStartPoint)) - sampler.position)/(3*2*fadelength*44100)))
+        setDel(val: 1 - sampler.volume)
+        print("000_ in \(sampler.volume)")
+        
+        
+    //default
+    } else if sampler.volume != 1 {
+      sampler.volume = 1
+    }
+
       
     }
     
@@ -371,6 +376,12 @@ class RoomAlien: Room {
     
     if let sampler = flows[2].generators[0] as? AKWaveTable {
       sampler.play()
+    }
+  }
+  
+  func setDel(val: Double){
+    for flow in flows[0...1]{
+      flow.drywets[0][2].balance = delFB + (val/2)
     }
   }
   
