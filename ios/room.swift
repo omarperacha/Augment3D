@@ -394,7 +394,7 @@ class RoomPure: Room {
   private let distanceThresholds = [1.0]
   
   private var oscs0 = [AKOscillator(), AKOscillator(), AKOscillator()]
-  private var baseFreq0 = 300.0
+  private var baseFreq0 = 322.0
   
   
   override init() {

@@ -57,13 +57,13 @@ class Flow {
       }
       
       drywets.append(drywetChain)
-    }
-  
-    if let findalDW = drywets.last?.last {
-      findalDW >>> output
-    } else {
-      print("000_ connecting genMixer to output, room \(room)")
-      genMixers.last! >>> output
+      
+      if let findalDW = drywets[i].last {
+        findalDW >>> output
+      } else {
+        print("000_ connecting genMixer to output, room \(room)")
+        genMixers[i] >>> output
+      }
     }
     
     output >>> room.mixer
