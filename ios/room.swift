@@ -177,8 +177,8 @@ class RoomBass: Room {
         _yaw = 1 + (abs(gravY))
       }
       
-      _yaw *= 0.875
     }
+    _yaw *= 0.875
     
     if let pitch = flow.effects[0][0] as? AKPitchShifter {
       pitch.shift = _yaw
@@ -391,17 +391,26 @@ class RoomAlien: Room {
 // MARK -- Pure Room
 class RoomPure: Room {
   
-  let distanceThresholds = [1.0]
+  private let distanceThresholds = [1.0]
+  
+  private var oscs0 = [AKOscillator(), AKOscillator(), AKOscillator()]
+  private var baseFreq0 = 300.0
+  
   
   override init() {
     super.init()
     
     
     let noise = AKWhiteNoise()
+    oscs0[0].frequency = baseFreq0/1.225
+    oscs0[1].frequency = baseFreq0
+    oscs0[2].frequency = baseFreq0*1.225
+    let mixer0 = AKMixer(oscs0)
+    mixer0.volume = 1
     
     let flow1 = Flow(room: self,
-                     gens: [noise],
-                     FX: [[AKKorgLowPassFilter(cutoffFrequency: 30, resonance: 1.4, saturation: 1.1)]],
+                     gens: [noise, mixer0],
+                     FX: [[AKKorgLowPassFilter(cutoffFrequency: 30, resonance: 1.4, saturation: 1.1)],[AKCostelloReverb()]],
                      distThresh: self.distanceThresholds[0], pos: [0, 0, -1])
     flows.append(flow1)
   }
@@ -419,6 +428,8 @@ class RoomPure: Room {
     
     flow.genMixers[0].volume = (distance < (flow.distanceThreshold - 0.2) ? vol : max(0, ((flow.distanceThreshold - distance)/0.2*vol)))*(forward)
     
+    flow.genMixers[1].volume = 0.3 * max(0, (distanceThresholds[0] - distance))*(-1*forward)
+    
     if let filter = flow.effects[0][0] as? AKKorgLowPassFilter {
       filter.cutoffFrequency = 30 + ((distanceThresholds[0] - distance) * 2000)
     }
@@ -432,14 +443,18 @@ class RoomPure: Room {
       } else {
         _yaw = 1 + (abs(gravY))
       }
-      
-      _yaw *= 0.875
+    
     }
     
+    oscs0[1].frequency = baseFreq0 + (_yaw*(baseFreq0/10))
   }
   
   override func startFlows() {
     super.startFlows()
+    
+    for osc in oscs0 {
+      osc.start()
+    }
     
     if let noise = flows[0].generators[0] as? AKWhiteNoise {
       noise.start()
