@@ -296,14 +296,12 @@ class RoomAlien: Room {
       if sampler.position > (3*(Double(sampler.loopEndPoint) - 2*fadelength*44100)) {
         sampler.volume = max(0, -1 + (3*(Double(sampler.loopEndPoint)) - sampler.position)/(1.5*2*fadelength*44100))
         setDel(val: 1 - sampler.volume)
-        print("000_ out \(sampler.volume)")
         
         
       //fadein
       } else if sampler.position < (3*(Double(sampler.loopStartPoint) + 2*fadelength*44100)) {
          sampler.volume = max(0, -1 * ((3*(Double(sampler.loopStartPoint)) - sampler.position)/(3*2*fadelength*44100)))
         setDel(val: 1 - sampler.volume)
-        print("000_ in \(sampler.volume)")
         
         
     //default
@@ -391,16 +389,34 @@ class RoomAlien: Room {
 // MARK -- Pure Room
 class RoomPure: Room {
   
-  private let distanceThresholds = [1.0]
+  private let distanceThresholds = [1.0, 0.5]
   
   private var oscs0 = [AKOscillator(), AKOscillator(), AKOscillator()]
   private var baseFreq0 = 322.0
+  
+  private var oscs1 = [AKOscillator(), AKOscillator(), AKOscillator()]
+  private let freq1 = 322.0 * 1.1125
+  private var baseFreq1 = 322.0 * 1.1125 {
+    didSet {
+      oscs1[0].frequency = baseFreq1/1.1125
+      oscs1[2].frequency = baseFreq1*1.1125
+    }
+  }
+  
+  private var oscs2 = [AKOscillator(), AKOscillator(), AKOscillator()]
+  private let freq2 = 322.0 * (1.225*1.1125)
+  private var baseFreq2 = 322.0 * (1.225*1.1125) {
+    didSet {
+      oscs2[0].frequency = baseFreq2*1.225*1.1125
+      oscs2[2].frequency = baseFreq2*1.225*1.1125
+    }
+  }
   
   
   override init() {
     super.init()
     
-    
+    //flow0
     let noise = AKWhiteNoise()
     oscs0[0].frequency = baseFreq0/1.225
     oscs0[1].frequency = baseFreq0
@@ -408,11 +424,35 @@ class RoomPure: Room {
     let mixer0 = AKMixer(oscs0)
     mixer0.volume = 1
     
-    let flow1 = Flow(room: self,
+    let flow0 = Flow(room: self,
                      gens: [noise, mixer0],
                      FX: [[AKKorgLowPassFilter(cutoffFrequency: 30, resonance: 1.4, saturation: 1.1)],[AKCostelloReverb()]],
                      distThresh: self.distanceThresholds[0], pos: [0, 0, -1])
+    flows.append(flow0)
+    
+    //flow1
+    oscs1[1].frequency = baseFreq1
+    let mixer1 = AKMixer(oscs1)
+    mixer1.volume = 1
+    
+    let flow1 = Flow(room: self,
+                     gens: [mixer1],
+                     FX: [[AKCostelloReverb()]],
+                     distThresh: self.distanceThresholds[0], pos: [-1, 0, 0])
     flows.append(flow1)
+    
+    
+    //flow2
+    oscs2[1].frequency = baseFreq2
+    let mixer2 = AKMixer(oscs2)
+    mixer2.volume = 1
+    
+    let flow2 = Flow(room: self,
+                     gens: [mixer2],
+                     FX: [[AKCostelloReverb()]],
+                     distThresh: self.distanceThresholds[0], pos: [1, 0, 0])
+    flows.append(flow2)
+    
   }
   
   func updateFlows(pos: NSArray, yaw: Double, gravY: Double, forward: Double){
@@ -425,6 +465,8 @@ class RoomPure: Room {
     
     let vol = 0.5
     let distance = flow.calculateDist(pos: pos as! [Double])
+    let distance1 = flows[1].calculateDist(pos: pos as! [Double])
+    let distance2 = flows[2].calculateDist(pos: pos as! [Double])
     
     flow.genMixers[0].volume = (distance < (flow.distanceThreshold - 0.2) ? vol : max(0, ((flow.distanceThreshold - distance)/0.2*vol)))*(forward)
     
@@ -433,6 +475,13 @@ class RoomPure: Room {
     if let filter = flow.effects[0][0] as? AKKorgLowPassFilter {
       filter.cutoffFrequency = 30 + ((distanceThresholds[0] - distance) * 2000)
     }
+    
+    flows[1].genMixers[0].volume = 0.3 * max(0, (distanceThresholds[0] - distance1))
+    baseFreq1 = freq1 + 2*forward*(sqrt(freq1))
+    
+    flows[2].genMixers[0].volume = 0.3 * max(0, (distanceThresholds[0] - distance2))
+    baseFreq2 = freq2 + -1*forward*(sqrt(freq2))
+    
     
     var _yaw = yaw
     if gravY > 0 {
@@ -447,12 +496,22 @@ class RoomPure: Room {
     }
     
     oscs0[1].frequency = baseFreq0 + (_yaw*(baseFreq0/10))
+    oscs1[1].frequency = baseFreq1 - (_yaw*(baseFreq1/(10/1.1125)))
+    oscs2[1].frequency = baseFreq2 - (_yaw*(baseFreq2/(10/(1.225*1.1125))))
   }
   
   override func startFlows() {
     super.startFlows()
     
     for osc in oscs0 {
+      osc.start()
+    }
+    
+    for osc in oscs1 {
+      osc.start()
+    }
+    
+    for osc in oscs2 {
       osc.start()
     }
     
