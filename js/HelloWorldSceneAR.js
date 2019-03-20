@@ -28,15 +28,21 @@ export default class HelloWorldSceneAR extends Component {
     this._onInitialized = this._onInitialized.bind(this);
       this._update = this._update.bind(this);
       this._onTouchAlien = this._onTouchAlien.bind(this)
+      this._onTouchMetalLo = this._onTouchMetalLo.bind(this)
+      this._onTouchMetalHi = this._onTouchMetalHi.bind(this)
   }
 
   render() {
     return (
             <ViroARScene onTrackingUpdated={this._onInitialized} onCameraTransformUpdate={this._update}>
+            < // guitar
+            ViroBox position={[0, 0, -1.5]} scale={[.4, .4, .4]} />
+            <ViroBox position={[0.5, 0.3, -1.25]} scale={[.27, .27, .27]} rotation={[20, -30, 0]} materials={["black"]} onClick={this._onTouchMetalHi}/>
+            <ViroBox position={[-0.5, 0.3, -1.25]} scale={[.27, .27, .27]} rotation={[20, 30, 0]} materials={["black"]} onClick={this._onTouchMetalLo}/>
             < // pure
-            ViroPolyline position={[0, 0, -1]} points={[[0,-1,0], [0,1,0.15]]} thickness={0.2} />
-            <ViroPolyline position={[1, 0, 0]} points={[[0,-1,0], [-0.15,1,0.15]]} thickness={0.2} />
-            <ViroPolyline position={[-1, 0, 0]} points={[[0,-1,0], [0.15,1,0.15]]} thickness={0.2} />
+            ViroPolyline position={[-3, 0, -1]} points={[[0,-1,0], [0,1,0.15]]} thickness={0.2} />
+            <ViroPolyline position={[-1.9, 0, 0]} points={[[0,-1,0], [-0.15,1,0.15]]} thickness={0.2} />
+            <ViroPolyline position={[-4.1, 0, 0]} points={[[0,-1,0], [0.15,1,0.15]]} thickness={0.2} />
             < // bass
             ViroPolyline position={[-2, -1.6, -1]} points={[[-.5,0,-.5], [0,.5,0], [.5,0,-.5], [0,.5,-1], [-.5,0,-.5]]} thickness={0.1} />
             < // alien
@@ -66,6 +72,16 @@ export default class HelloWorldSceneAR extends Component {
     _onTouchAlien(position, source)  {
         // user has clicked the object
         this.conductor.touchDown("alien");
+    }
+    
+    _onTouchMetalLo(position, source)  {
+        // user has clicked the object
+        this.conductor.touchDown("metalLo");
+    }
+    
+    _onTouchMetalHi(position, source)  {
+        // user has clicked the object
+        this.conductor.touchDown("metalHi");
     }
     
 }

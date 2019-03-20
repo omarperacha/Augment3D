@@ -77,6 +77,12 @@ class Flow {
     return sqrt((x*x)+(y*y)+(z*z))
   }
   
+  func calculatePan(pos: [Double], forward: Double) -> Double {
+    let x = position[0] - pos[0]
+    let pan = x*forward * -1
+    return pan
+  }
+  
   
   // Mark - private functionality
   

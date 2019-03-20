@@ -48,6 +48,8 @@ class Conductor: NSObject {
     rooms.append(roomBass)
     let roomPure = RoomPure()
     rooms.append(roomPure)
+    let roomGuitar = RoomGuitar()
+    rooms.append(roomGuitar)
     
     for room in rooms {
       room.mixer >>> mixer
@@ -112,6 +114,10 @@ class Conductor: NSObject {
     if let roomPure = rooms[3] as? RoomPure {
       roomPure.updateFlows(pos: pos, yaw: gravX, gravY: gravY, forward: forward[2] as! Double)
     }
+    
+    if let roomGuitar = rooms[4] as? RoomGuitar {
+      roomGuitar.updateFlows(pos: pos, yaw: gravX, gravY: gravY, forward: forward[2] as! Double)
+    }
   
   }
   
@@ -125,6 +131,14 @@ class Conductor: NSObject {
     if location == "alien" {
       if let roomAlien = rooms[1] as? RoomAlien {
         roomAlien.playSampler()
+      }
+    } else if location == "metalLo" {
+      if let roomGuitar = rooms[4] as? RoomGuitar {
+        roomGuitar.playSamplerLo()
+      }
+    } else if location == "metalHi" {
+      if let roomGuitar = rooms[4] as? RoomGuitar {
+        roomGuitar.playSamplerHi()
       }
     }
   }

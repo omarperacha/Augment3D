@@ -83,19 +83,94 @@ class RoomConv: Room {
 // MARK -- Guitar Room
 class RoomGuitar: Room {
   
-  private let distanceThresholds = [1.0]
+  private let distanceThresholds = [1.5]
   
   override init(){
     super.init()
     
+    let fileUrl = Bundle(for: type(of: self)).url(forResource: "death clock lo", withExtension:"wav")
+    let  dcFile = try! AKAudioFile(forReading: fileUrl!)
+    let dcSampler = AKWaveTable(file: dcFile)
+    
+    //TO-DO: add dcHI/weirdHI samplers
+    
+    let flow0 = Flow(room: self,
+                     gens: [dcSampler],
+                     FX: [[AKCompressor()]],
+                     distThresh: distanceThresholds[0],
+                     pos: [0, 0, -1.5])
+    
+    flows.append(flow0)
+    
+    let fileUrl4 = Bundle(for: type(of: self)).url(forResource: "metal lo", withExtension:"m4a")
+    let  mlFile = try! AKAudioFile(forReading: fileUrl4!)
+    let mlSampler = AKWaveTable(file: mlFile)
+    
+    let flow1 = Flow(room: self,
+                     gens: [mlSampler],
+                     FX: [[AKPanner()]],
+                     distThresh: distanceThresholds[0],
+                     pos: [-0.5, 0.3, -1.25])
+    
+    flows.append(flow1)
+    
+    let fileUrl5 = Bundle(for: type(of: self)).url(forResource: "metal hi", withExtension:"m4a")
+    let  mhFile = try! AKAudioFile(forReading: fileUrl5!)
+    let mhSampler = AKWaveTable(file: mhFile)
+    
+    let flow2 = Flow(room: self,
+                     gens: [mhSampler],
+                     FX: [[AKPanner()]],
+                     distThresh: distanceThresholds[0],
+                     pos: [-0.5, 0.3, -1.25])
+    
+    flows.append(flow2)
+    
   }
   
-  func updateFlows(pos: NSArray, yaw: Double, gravY: Double){
+  func updateFlows(pos: NSArray, yaw: Double, gravY: Double, forward: Double){
     
     if flows.count == 0 {
       return
     }
     
+    // flows 1 & 2
+    for flow in flows[1...2] {
+      
+      let flowMaxVol = 0.7
+      let flowVol = 0.2
+      let distance = flow.calculateDist(pos: pos as! [Double])
+      flow.genMixers[0].volume = distance < (flow.distanceThreshold - 0.1) ? (flowVol + ((flow.distanceThreshold - distance)/(flow.distanceThreshold - 0.1)*(flowMaxVol-flowVol))) : max(0, ((flow.distanceThreshold - distance)/0.1*flowVol))
+      
+      if let pan = flow.effects[0][0] as? AKPanner {
+        pan.pan = flow.calculatePan(pos: pos as! [Double], forward: forward)
+      }
+      
+    }
+    
+    
+    
+  }
+  
+  override func startFlows() {
+    for i in flows[0].generators.indices {
+      if let sampler = flows[0].generators[i] as? AKWaveTable {
+        if i != 0 {sampler.start()}
+      }
+    }
+    
+  }
+  
+  func playSamplerLo(){
+    if let sampler = flows[1].generators[0] as? AKWaveTable {
+      sampler.play()
+    }
+  }
+  
+  func playSamplerHi(){
+    if let sampler = flows[2].generators[0] as? AKWaveTable {
+      sampler.play()
+    }
   }
   
   
@@ -427,7 +502,7 @@ class RoomPure: Room {
     let flow0 = Flow(room: self,
                      gens: [noise, mixer0],
                      FX: [[AKKorgLowPassFilter(cutoffFrequency: 30, resonance: 1.4, saturation: 1.1)],[AKCostelloReverb()]],
-                     distThresh: self.distanceThresholds[0], pos: [0, 0, -1])
+                     distThresh: self.distanceThresholds[0], pos: [-3, 0, -1])
     flows.append(flow0)
     
     //flow1
@@ -438,7 +513,7 @@ class RoomPure: Room {
     let flow1 = Flow(room: self,
                      gens: [mixer1],
                      FX: [[AKCostelloReverb()]],
-                     distThresh: self.distanceThresholds[0], pos: [-1, 0, 0])
+                     distThresh: self.distanceThresholds[0], pos: [-4.1, 0, 0])
     flows.append(flow1)
     
     
@@ -450,7 +525,7 @@ class RoomPure: Room {
     let flow2 = Flow(room: self,
                      gens: [mixer2],
                      FX: [[AKCostelloReverb()]],
-                     distThresh: self.distanceThresholds[0], pos: [1, 0, 0])
+                     distThresh: self.distanceThresholds[0], pos: [-1.9, 0, 0])
     flows.append(flow2)
     
   }
