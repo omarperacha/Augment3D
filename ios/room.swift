@@ -84,6 +84,14 @@ class RoomConv: Room {
 class RoomGuitar: Room {
   
   private let distanceThresholds = [1.5]
+  private let dcBaseRate = 375
+  
+  private var callCount = 0
+  private var dcModuLo = 500
+  private var basePitchLo = 0.0
+  private var pitchFactorLo = 1.0
+  private var basePitchHi = 0.0
+  private var pitchFactorHi = 1.0
   
   override init(){
     super.init()
@@ -96,7 +104,7 @@ class RoomGuitar: Room {
     
     let flow0 = Flow(room: self,
                      gens: [dcSampler],
-                     FX: [[AKCompressor()]],
+                     FX: [[AKPitchShifter(), AKCompressor()]],
                      distThresh: distanceThresholds[0],
                      pos: [0, 0, -1.5])
     
@@ -108,7 +116,7 @@ class RoomGuitar: Room {
     
     let flow1 = Flow(room: self,
                      gens: [mlSampler],
-                     FX: [[AKPanner()]],
+                     FX: [[AKPanner(), AKPitchShifter()]],
                      distThresh: distanceThresholds[0],
                      pos: [-0.5, 0.3, -1.25])
     
@@ -120,7 +128,7 @@ class RoomGuitar: Room {
     
     let flow2 = Flow(room: self,
                      gens: [mhSampler],
-                     FX: [[AKPanner()]],
+                     FX: [[AKPanner(), AKPitchShifter()]],
                      distThresh: distanceThresholds[0],
                      pos: [-0.5, 0.3, -1.25])
     
@@ -128,17 +136,43 @@ class RoomGuitar: Room {
     
   }
   
+  
+  
   func updateFlows(pos: NSArray, yaw: Double, gravY: Double, forward: Double){
     
     if flows.count == 0 {
       return
     }
     
+    let flow0 = flows[0]
+    let distance = flow0.calculateDist(pos: pos as! [Double])
+    
+    if (pos[2] as! Double) < -1.5 || distance > flow0.distanceThreshold {
+      callCount = 0
+    } else {
+      callCount += 1
+    }
+    
+    if callCount >= dcModuLo {
+      playSamplerDCLo()
+      callCount = 0
+    }
+    
+    let flow0MaxVol = 0.6
+    let flow0Vol = 0.2
+    flow0.genMixers[0].volume = distance < (flow0.distanceThreshold - 0.1) ? (flow0Vol + ((flow0.distanceThreshold - distance)/(flow0.distanceThreshold - 0.1)*(flow0MaxVol-flow0Vol))) : max(0, ((flow0.distanceThreshold - distance)/0.1*flow0Vol))
+    
+    dcModuLo = 1 + Int(distance*dcBaseRate)
+    print(dcModuLo)
+    
     // flows 1 & 2
+    var currentFlow = 0
     for flow in flows[1...2] {
       
-      let flowMaxVol = 0.7
-      let flowVol = 0.2
+      currentFlow += 1
+      
+      let flowMaxVol = 0.5
+      let flowVol = 0.15
       let distance = flow.calculateDist(pos: pos as! [Double])
       flow.genMixers[0].volume = distance < (flow.distanceThreshold - 0.1) ? (flowVol + ((flow.distanceThreshold - distance)/(flow.distanceThreshold - 0.1)*(flowMaxVol-flowVol))) : max(0, ((flow.distanceThreshold - distance)/0.1*flowVol))
       
@@ -146,7 +180,16 @@ class RoomGuitar: Room {
         pan.pan = flow.calculatePan(pos: pos as! [Double], forward: forward)
       }
       
+      if currentFlow == 1 {
+        basePitchLo = 0.875 - distance
+        pitchFactorLo = 0.875 + ((flow.distanceThreshold - distance)/2)
+      } else if currentFlow == 2 {
+        basePitchHi = 5.25 * (1 - (distance/flow.distanceThreshold))
+        pitchFactorHi = 0.875 + ((flow.distanceThreshold - distance))
+      }
+      
     }
+
     
     
     
@@ -162,13 +205,41 @@ class RoomGuitar: Room {
   }
   
   func playSamplerLo(){
+    var pitchshift = pitchFactorLo * (Int.random(in: 0 ..< 4))
+    pitchshift += basePitchLo
+    
+    if let pitchShifter = flows[1].effects[0][1] as? AKPitchShifter {
+      pitchShifter.shift = pitchshift
+    }
+    
     if let sampler = flows[1].generators[0] as? AKWaveTable {
       sampler.play()
     }
   }
   
   func playSamplerHi(){
+    var pitchshift = pitchFactorHi * (Int.random(in: 0 ..< 5))
+    pitchshift += basePitchHi
+    
+    if let pitchShifter = flows[2].effects[0][1] as? AKPitchShifter {
+      pitchShifter.shift = pitchshift
+    }
+    
     if let sampler = flows[2].generators[0] as? AKWaveTable {
+      sampler.play()
+    }
+  }
+  
+  private func playSamplerDCLo(){
+    
+    if let pitch = flows[0].effects[0][0] as? AKPitchShifter {
+      let prob = 1.0 - (dcModuLo/dcBaseRate)
+      if random(in: 0...1) < prob {
+        pitch.shift = random(in: (-1 * prob)...(prob))
+      }
+    }
+    
+    if let sampler = flows[0].generators[0] as? AKWaveTable {
       sampler.play()
     }
   }
