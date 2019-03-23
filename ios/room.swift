@@ -84,9 +84,9 @@ class RoomConv: Room {
 class RoomGuitar: Room {
   
   private let distanceThresholds = [1.5]
-  private let dcBaseRate = 375
+  private let dcBaseRate = 350
   
-  private var callCount = 0
+  private var callCount = 350
   private var dcModuLo = 500
   private var basePitchLo = 0.0
   private var pitchFactorLo = 1.0
@@ -100,11 +100,20 @@ class RoomGuitar: Room {
     let  dcFile = try! AKAudioFile(forReading: fileUrl!)
     let dcSampler = AKWaveTable(file: dcFile)
     
-    //TO-DO: add dcHI/weirdHI samplers
+    let fileUrl1 = Bundle(for: type(of: self)).url(forResource: "death clock hi", withExtension:"m4a")
+    let  dcHiFile = try! AKAudioFile(forReading: fileUrl1!)
+    let dcHiSampler = AKWaveTable(file: dcHiFile)
+    
+    let fileUrl2 = Bundle(for: type(of: self)).url(forResource: "freaky hi", withExtension:"m4a")
+    let  frHiFile = try! AKAudioFile(forReading: fileUrl2!)
+    let frHiSampler = AKWaveTable(file: frHiFile)
+    
     
     let flow0 = Flow(room: self,
-                     gens: [dcSampler],
-                     FX: [[AKPitchShifter(), AKCompressor()]],
+                     gens: [dcSampler, dcHiSampler, frHiSampler],
+                     FX: [[AKPitchShifter(), AKCompressor()],
+                          [AKCostelloReverb(feedback: 0.9, cutoffFrequency: 1000)],
+                          [AKCostelloReverb(feedback: 0.9, cutoffFrequency: 1000)]],
                      distThresh: distanceThresholds[0],
                      pos: [0, 0, -1.5])
     
@@ -163,7 +172,12 @@ class RoomGuitar: Room {
     flow0.genMixers[0].volume = distance < (flow0.distanceThreshold - 0.1) ? (flow0Vol + ((flow0.distanceThreshold - distance)/(flow0.distanceThreshold - 0.1)*(flow0MaxVol-flow0Vol))) : max(0, ((flow0.distanceThreshold - distance)/0.1*flow0Vol))
     
     dcModuLo = 1 + Int(distance*dcBaseRate)
-    print(dcModuLo)
+    
+    // hi samplers
+    for i in [1...2] {
+      
+      flow0.drywets[i][0].balance = distance/2
+    }
     
     // flows 1 & 2
     var currentFlow = 0
@@ -177,7 +191,7 @@ class RoomGuitar: Room {
       flow.genMixers[0].volume = distance < (flow.distanceThreshold - 0.1) ? (flowVol + ((flow.distanceThreshold - distance)/(flow.distanceThreshold - 0.1)*(flowMaxVol-flowVol))) : max(0, ((flow.distanceThreshold - distance)/0.1*flowVol))
       
       if let pan = flow.effects[0][0] as? AKPanner {
-        pan.pan = flow.calculatePan(pos: pos as! [Double], forward: forward)
+        pan.pan = flow.calculatePan(pos: pos as! [Double], forward: forward)*2
       }
       
       if currentFlow == 1 {
@@ -198,7 +212,9 @@ class RoomGuitar: Room {
   override func startFlows() {
     for i in flows[0].generators.indices {
       if let sampler = flows[0].generators[i] as? AKWaveTable {
-        if i != 0 {sampler.start()}
+        if i != 0 {
+          sampler.loopEnabled = true
+          sampler.start()}
       }
     }
     
@@ -240,6 +256,14 @@ class RoomGuitar: Room {
     }
     
     if let sampler = flows[0].generators[0] as? AKWaveTable {
+      if sampler.volume != 1 {
+        // if mid-fade
+        return
+      }
+      //fadeout
+      repeat {sampler.volume -= 0.02} while (sampler.volume > 0)
+      sampler.stop()
+      sampler.volume = 1
       sampler.play()
     }
   }
