@@ -189,14 +189,18 @@ class RoomGuitar: Room {
     // hi samplers
     for i in 1...2 {
       
-      let _forward = forward * ((i == 1) ? -1 : 1)
+      if distance > distanceThresholds[0] || (pos[2] as! Double) < -2.5 {
+        flow0.genMixers[i].volume = 0
+      } else {
       
-      flow0.drywets[i][0].balance = distance/4
-      
-      let volMul = max(0, 0.5 * Double.minimum(1, _forward + 0.5))
-      
-      flow0.genMixers[i].volume = max(0.0, ((_yaw + 1) * volMul))
-      
+        let _forward = forward * ((i == 1) ? -1 : 1)
+        
+        flow0.drywets[i][0].balance = distance/4
+        
+        let volMul = max(0, 0.5 * Double.minimum(1, _forward + 0.5))
+        
+        flow0.genMixers[i].volume = max(0.0, ((_yaw + 1) * volMul))
+      }
     }
     
     // flows 1 & 2
