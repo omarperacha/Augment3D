@@ -111,7 +111,7 @@ class RoomGuitar: Room {
     
     let flow0 = Flow(room: self,
                      gens: [dcSampler, dcHiSampler, frHiSampler],
-                     FX: [[AKPitchShifter(), AKCompressor()],
+                     FX: [[AKPitchShifter(), AKCostelloReverb(feedback: 0.65), AKCompressor()],
                           [AKCostelloReverb(feedback: 0.9, cutoffFrequency: 1000)],
                           [AKCostelloReverb(feedback: 0.9, cutoffFrequency: 1000)]],
                      distThresh: distanceThresholds[0],
@@ -167,16 +167,36 @@ class RoomGuitar: Room {
       callCount = 0
     }
     
-    let flow0MaxVol = 0.6
-    let flow0Vol = 0.2
+    let flow0MaxVol = 0.5
+    let flow0Vol = 0.1
+    flow0.drywets[0][1].balance = distance/2
     flow0.genMixers[0].volume = distance < (flow0.distanceThreshold - 0.1) ? (flow0Vol + ((flow0.distanceThreshold - distance)/(flow0.distanceThreshold - 0.1)*(flow0MaxVol-flow0Vol))) : max(0, ((flow0.distanceThreshold - distance)/0.1*flow0Vol))
     
     dcModuLo = 1 + Int(distance*dcBaseRate)
     
+    var _yaw = yaw
+    if gravY > 0 {
+      let negative = (yaw < 0)
+      
+      if negative {
+        _yaw = -1 - (abs(gravY))
+      } else {
+        _yaw = 1 + (abs(gravY))
+      }
+      
+    }
+    
     // hi samplers
-    for i in [1...2] {
+    for i in 1...2 {
+      
+      let _forward = forward * ((i == 1) ? -1 : 1)
       
       flow0.drywets[i][0].balance = distance/2
+      
+      let volMul = 0.5 * Double.minimum(1, _forward + 0.5)
+      
+      flow0.genMixers[i].volume = max(0.0, ((_yaw + 0.5) * volMul))
+      
     }
     
     // flows 1 & 2
@@ -426,7 +446,7 @@ class RoomAlien: Room {
     
     let flow2 = Flow(room: self,
                      gens: [sampler2],
-                     FX: [[AKPanner(), AKPitchShifter(), AKCostelloReverb(feedback: 0.8, cutoffFrequency: 2400)]],
+                     FX: [[AKPitchShifter(), AKCostelloReverb(feedback: 0.8, cutoffFrequency: 2400)]],
                      distThresh: distanceThresholds[1],
                      pos: [0, 0.2, -3.8])
     
@@ -526,10 +546,6 @@ class RoomAlien: Room {
     basePitch = 5.25 - distance
     basePitchFactor = 0.875 + ((distanceThresholds[1] - distance)/2)
     
-    if let pan = flows[2].effects[0][0] as? AKPanner {
-      pan.pan = pos[0] as! Double
-    }
-    
   
   }
   
@@ -538,7 +554,7 @@ class RoomAlien: Room {
     var pitchshift = basePitchFactor * (Int.random(in: 0 ..< 4))
     pitchshift += basePitch
     
-    if let pitchShifter = flows[2].effects[0][1] as? AKPitchShifter {
+    if let pitchShifter = flows[2].effects[0][0] as? AKPitchShifter {
       pitchShifter.shift = pitchshift
     }
     
