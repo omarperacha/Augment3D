@@ -44,13 +44,13 @@ export default class HelloWorldSceneAR extends Component {
             <ViroPolyline position={[-1.9, 0, 0]} points={[[0,-1,0], [-0.15,1,0.15]]} thickness={0.2} />
             <ViroPolyline position={[-4.1, 0, 0]} points={[[0,-1,0], [0.15,1,0.15]]} thickness={0.2} />
             < // bass
-            ViroPolyline position={[-3, -1.05, -1.5]} points={[[-.5,0,-.5], [0,.5,0], [.5,0,-.5], [0,.5,-1], [-.5,0,-.5]]} thickness={0.1} />
+            ViroPolyline position={[-3.5, -1.05, -1.75]} points={[[-.5,0,-.5], [0,.5,0], [.5,0,-.5], [0,.5,-1], [-.5,0,-.5]]} thickness={0.1} />
             < // alien
             ViroSphere position={[-1.5, -0.2, -3.5]} radius={.25} />
             <ViroSphere position={[-1.5, -0.2, -2.5]} radius={.25} />
             <ViroSphere position={[-2.3, 0.2, -3]} radius={.15} materials={["black"]} onClick={this._onTouchAlien} />
             < // conv
-            ViroBox position={[0, 0, -3.5]} scale={[.3, .3, .3]} />
+            ViroBox position={[0.5, 0, -3.5]} scale={[.3, .3, .3]} />
       </ViroARScene>
     );
   }

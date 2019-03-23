@@ -32,7 +32,7 @@ class RoomConv: Room {
                      gens: [AKMorphingOscillator(waveformArray: tables)],
                      FX: [[conv, convHP, convReduce, AKPeakLimiter()]],
                      distThresh: distanceThresholds[0],
-                     pos: [0, 0, -3.5])
+                     pos: [0.5, 0, -3.5])
     
     flows.append(flow0)
     
@@ -340,7 +340,7 @@ class RoomBass: Room {
                       AKBooster(gain: 1),
                       AKCostelloReverb()]],
                     distThresh: distanceThresholds[0],
-                    pos: [-3, -1.05, -1.5])
+                    pos: [-3.5, -1.05, -1.75])
     
     flows.append(flow)
   }
