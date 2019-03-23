@@ -40,17 +40,17 @@ export default class HelloWorldSceneAR extends Component {
             <ViroBox position={[0.5, 0.3, -1.25]} scale={[.27, .27, .27]} rotation={[20, -30, 0]} materials={["black"]} onClick={this._onTouchMetalHi}/>
             <ViroBox position={[-0.5, 0.3, -1.25]} scale={[.27, .27, .27]} rotation={[20, 30, 0]} materials={["black"]} onClick={this._onTouchMetalLo}/>
             < // pure
-            ViroPolyline position={[-3, 0, -1]} points={[[0,-1,0], [0,1,0.15]]} thickness={0.2} />
+            ViroPolyline position={[-3, 0, 1]} points={[[0,-1,0], [0,1,0.15]]} thickness={0.2} />
             <ViroPolyline position={[-1.9, 0, 0]} points={[[0,-1,0], [-0.15,1,0.15]]} thickness={0.2} />
             <ViroPolyline position={[-4.1, 0, 0]} points={[[0,-1,0], [0.15,1,0.15]]} thickness={0.2} />
             < // bass
-            ViroPolyline position={[-2, -1.6, -1]} points={[[-.5,0,-.5], [0,.5,0], [.5,0,-.5], [0,.5,-1], [-.5,0,-.5]]} thickness={0.1} />
+            ViroPolyline position={[-3, -1.05, -1.5]} points={[[-.5,0,-.5], [0,.5,0], [.5,0,-.5], [0,.5,-1], [-.5,0,-.5]]} thickness={0.1} />
             < // alien
-            ViroSphere position={[0.6, -0.2, -3]} radius={.25} />
-            <ViroSphere position={[-0.6, -0.2, -3]} radius={.25} />
-            <ViroSphere position={[0, 0.2, -3.8]} radius={.15} materials={["black"]} onClick={this._onTouchAlien} />
+            ViroSphere position={[-1.5, -0.2, -3.5]} radius={.25} />
+            <ViroSphere position={[-1.5, -0.2, -2.5]} radius={.25} />
+            <ViroSphere position={[-2.3, 0.2, -3]} radius={.15} materials={["black"]} onClick={this._onTouchAlien} />
             < // conv
-            ViroBox position={[0, 0, -5]} scale={[.3, .3, .3]} />
+            ViroBox position={[0, 0, -3.5]} scale={[.3, .3, .3]} />
       </ViroARScene>
     );
   }

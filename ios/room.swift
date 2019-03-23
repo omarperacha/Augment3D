@@ -32,7 +32,7 @@ class RoomConv: Room {
                      gens: [AKMorphingOscillator(waveformArray: tables)],
                      FX: [[conv, convHP, convReduce, AKPeakLimiter()]],
                      distThresh: distanceThresholds[0],
-                     pos: [0, 0, -5])
+                     pos: [0, 0, -3.5])
     
     flows.append(flow0)
     
@@ -340,7 +340,7 @@ class RoomBass: Room {
                       AKBooster(gain: 1),
                       AKCostelloReverb()]],
                     distThresh: distanceThresholds[0],
-                    pos: [-2, -1.6, -1])
+                    pos: [-3, -1.05, -1.5])
     
     flows.append(flow)
   }
@@ -427,7 +427,7 @@ class RoomAlien: Room {
       gens: [sampler],
       FX: [[AKPitchShifter(), AKBooster(gain: boost), del]],
       distThresh: distanceThresholds[0],
-      pos: [-0.5, -0.2, -3])
+      pos: [-1.5, -0.2, -3.5])
     
     flows.append(flow0)
     
@@ -439,7 +439,7 @@ class RoomAlien: Room {
                      gens: [sampler],
                      FX: [[AKPitchShifter(), AKBooster(gain: boost), del2]],
                      distThresh: distanceThresholds[0],
-                     pos: [0.5, -0.2, -3])
+                     pos: [-1.5, -0.2, -2.5])
     
     flows.append(flow1)
     
@@ -452,7 +452,7 @@ class RoomAlien: Room {
                      gens: [sampler2],
                      FX: [[AKPitchShifter(), AKCostelloReverb(feedback: 0.8, cutoffFrequency: 2400)]],
                      distThresh: distanceThresholds[1],
-                     pos: [0, 0.2, -3.8])
+                     pos: [-2.3, 0.2, -3])
     
     flows.append(flow2)
     
@@ -617,7 +617,7 @@ class RoomPure: Room {
     let flow0 = Flow(room: self,
                      gens: [noise, mixer0],
                      FX: [[AKKorgLowPassFilter(cutoffFrequency: 30, resonance: 1.4, saturation: 1.1)],[AKCostelloReverb()]],
-                     distThresh: self.distanceThresholds[0], pos: [-3, 0, -1])
+                     distThresh: self.distanceThresholds[0], pos: [-3, 0, 1])
     flows.append(flow0)
     
     //flow1
@@ -658,19 +658,19 @@ class RoomPure: Room {
     let distance1 = flows[1].calculateDist(pos: pos as! [Double])
     let distance2 = flows[2].calculateDist(pos: pos as! [Double])
     
-    flow.genMixers[0].volume = (distance < (flow.distanceThreshold - 0.2) ? vol : max(0, ((flow.distanceThreshold - distance)/0.2*vol)))*(forward)
+    flow.genMixers[0].volume = (distance < (flow.distanceThreshold - 0.2) ? vol : max(0, ((flow.distanceThreshold - distance)/0.2*vol)))*(-1*forward)
     
-    flow.genMixers[1].volume = 0.3 * max(0, (distanceThresholds[0] - distance))*(-1*forward)
+    flow.genMixers[1].volume = 0.3 * max(0, (distanceThresholds[0] - distance))*(forward)
     
     if let filter = flow.effects[0][0] as? AKKorgLowPassFilter {
       filter.cutoffFrequency = 30 + ((distanceThresholds[0] - distance) * 2000)
     }
     
     flows[1].genMixers[0].volume = 0.3 * max(0, (distanceThresholds[0] - distance1))
-    baseFreq1 = freq1 + 2*forward*(sqrt(freq1))
+    baseFreq1 = freq1 + -1*2*forward*(sqrt(freq1))
     
     flows[2].genMixers[0].volume = 0.3 * max(0, (distanceThresholds[0] - distance2))
-    baseFreq2 = freq2 + -1*forward*(sqrt(freq2))
+    baseFreq2 = freq2 + forward*(sqrt(freq2))
     
     
     var _yaw = yaw
