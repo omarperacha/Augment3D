@@ -40,6 +40,8 @@
 		5911F1182246889300BBA36E /* death clock hi.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 5911F0F02246889300BBA36E /* death clock hi.m4a */; };
 		5911F1192246889300BBA36E /* freaky hi.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 5911F1162246889300BBA36E /* freaky hi.m4a */; };
 		5911F11A2246889300BBA36E /* freaky hi.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 5911F1162246889300BBA36E /* freaky hi.m4a */; };
+		5911F11C2246981800BBA36E /* OP presents II.png in Resources */ = {isa = PBXBuildFile; fileRef = 5911F11B2246981800BBA36E /* OP presents II.png */; };
+		5911F11D2246981800BBA36E /* OP presents II.png in Resources */ = {isa = PBXBuildFile; fileRef = 5911F11B2246981800BBA36E /* OP presents II.png */; };
 		59B9C492222A0527004BDB6F /* conductor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59B9C491222A0527004BDB6F /* conductor.swift */; };
 		59B9C4A0222A06D4004BDB6F /* conductorBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 59B9C49F222A06D4004BDB6F /* conductorBridge.m */; };
 		59E3722322348CD900C6D3D2 /* metal lo.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 59E371F822348CD900C6D3D2 /* metal lo.m4a */; };
@@ -362,6 +364,7 @@
 		2D16E6891FA4F8E400B85C8A /* libReact.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libReact.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		5911F0F02246889300BBA36E /* death clock hi.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = "death clock hi.m4a"; sourceTree = "<group>"; };
 		5911F1162246889300BBA36E /* freaky hi.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = "freaky hi.m4a"; sourceTree = "<group>"; };
+		5911F11B2246981800BBA36E /* OP presents II.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "OP presents II.png"; sourceTree = "<group>"; };
 		59B9C490222A0526004BDB6F /* Augment3d-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Augment3d-Bridging-Header.h"; sourceTree = "<group>"; };
 		59B9C491222A0527004BDB6F /* conductor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = conductor.swift; sourceTree = "<group>"; };
 		59B9C49F222A06D4004BDB6F /* conductorBridge.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = conductorBridge.m; sourceTree = "<group>"; };
@@ -519,6 +522,7 @@
 		13B07FAE1A68108700A75B9A /* Augment3d */ = {
 			isa = PBXGroup;
 			children = (
+				5911F11B2246981800BBA36E /* OP presents II.png */,
 				59EEB8F2222C4D550089C065 /* Sounds */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
@@ -1122,6 +1126,7 @@
 			files = (
 				5911F11A2246889300BBA36E /* freaky hi.m4a in Resources */,
 				59E3722C22348CD900C6D3D2 /* alien hi.m4a in Resources */,
+				5911F11D2246981800BBA36E /* OP presents II.png in Resources */,
 				59E3722422348CD900C6D3D2 /* metal lo.m4a in Resources */,
 				59E3722E22348CD900C6D3D2 /* death clock lo.wav in Resources */,
 				59EEB91A222C510E0089C065 /* Locked bass IR_1.wav in Resources */,
@@ -1138,6 +1143,7 @@
 				59E3722D22348CD900C6D3D2 /* death clock lo.wav in Resources */,
 				59E3722922348CD900C6D3D2 /* alien lo.m4a in Resources */,
 				59E3722522348CD900C6D3D2 /* metal hi.m4a in Resources */,
+				5911F11C2246981800BBA36E /* OP presents II.png in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				5911F1192246889300BBA36E /* freaky hi.m4a in Resources */,
 				59EEB919222C4D550089C065 /* Locked bass IR_1.wav in Resources */,

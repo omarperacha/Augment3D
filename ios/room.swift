@@ -111,7 +111,7 @@ class RoomGuitar: Room {
     
     let flow0 = Flow(room: self,
                      gens: [dcSampler, dcHiSampler, frHiSampler],
-                     FX: [[AKPitchShifter(), AKCostelloReverb(feedback: 0.65), AKCompressor()],
+                     FX: [[AKPitchShifter(), AKCostelloReverb(feedback: 0.4), AKCompressor()],
                           [AKCostelloReverb(feedback: 0.9, cutoffFrequency: 1000)],
                           [AKCostelloReverb(feedback: 0.9, cutoffFrequency: 1000)]],
                      distThresh: distanceThresholds[0],
@@ -169,7 +169,7 @@ class RoomGuitar: Room {
     
     let flow0MaxVol = 0.5
     let flow0Vol = 0.1
-    flow0.drywets[0][1].balance = distance/2
+    flow0.drywets[0][1].balance = distance/3
     flow0.genMixers[0].volume = distance < (flow0.distanceThreshold - 0.1) ? (flow0Vol + ((flow0.distanceThreshold - distance)/(flow0.distanceThreshold - 0.1)*(flow0MaxVol-flow0Vol))) : max(0, ((flow0.distanceThreshold - distance)/0.1*flow0Vol))
     
     dcModuLo = 1 + Int(distance*dcBaseRate)
@@ -191,11 +191,11 @@ class RoomGuitar: Room {
       
       let _forward = forward * ((i == 1) ? -1 : 1)
       
-      flow0.drywets[i][0].balance = distance/2
+      flow0.drywets[i][0].balance = distance/4
       
-      let volMul = 0.5 * Double.minimum(1, _forward + 0.5)
+      let volMul = max(0, 0.5 * Double.minimum(1, _forward + 0.5))
       
-      flow0.genMixers[i].volume = max(0.0, ((_yaw + 0.5) * volMul))
+      flow0.genMixers[i].volume = max(0.0, ((_yaw + 1) * volMul))
       
     }
     
