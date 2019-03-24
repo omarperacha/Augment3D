@@ -143,5 +143,10 @@ class Conductor: NSObject {
     }
   }
   
+  @objc(tearDown)
+  func tearDown() {
+    print("000_ CALLED TEAR DOWN")
+  }
+  
   
 }

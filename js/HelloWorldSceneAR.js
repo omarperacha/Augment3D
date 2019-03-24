@@ -2,7 +2,7 @@
 
 import React, { Component } from 'react';
 
-import {StyleSheet, NativeModules} from 'react-native';
+import {StyleSheet, NativeModules, AppState} from 'react-native';
 
 import {
   ViroARScene,
@@ -21,6 +21,7 @@ export default class HelloWorldSceneAR extends Component {
 
     // Set initial state here
     this.state = {
+        appState: AppState.currentState,
     };
 
       this.conductor = NativeModules.Conductor
@@ -54,6 +55,23 @@ export default class HelloWorldSceneAR extends Component {
       </ViroARScene>
     );
   }
+    
+    componentDidMount() {
+        AppState.addEventListener('change', this._handleAppStateChange);
+    }
+    
+    componentWillUnmount() {
+        AppState.removeEventListener('change', this._handleAppStateChange);
+    }
+    
+    _handleAppStateChange = (nextAppState) => {
+        if (
+            nextAppState === 'inactive'
+            ) {
+            this.conductor.tearDown();
+        }
+        this.setState({appState: nextAppState});
+    };
 
   _onInitialized(state, reason) {
     if (state == ViroConstants.TRACKING_NORMAL) {
