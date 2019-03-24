@@ -74,7 +74,8 @@ class RoomConv: Room {
     }
     
     let conv = flow.drywets[0][0]
-    conv.balance = max(0.01, (_yaw/4) + 0.25)
+    let convMul = distance < (flow.distanceThreshold - 0.1) ? 1 : max(0, ((flow.distanceThreshold - distance)/0.1))
+    conv.balance = max(0.01, (_yaw/4) + 0.25) * convMul
   }
   
 }
@@ -83,10 +84,10 @@ class RoomConv: Room {
 // MARK -- Guitar Room
 class RoomGuitar: Room {
   
-  private let distanceThresholds = [1.0]
-  private let dcBaseRate = 350
+  private let distanceThresholds = [1.0, 1.25]
+  private let dcBaseRate = 420
   
-  private var callCount = 350
+  private var callCount = 420
   private var dcModuLo = 500
   private var basePitchLo = 0.0
   private var pitchFactorLo = 1.0
@@ -126,7 +127,7 @@ class RoomGuitar: Room {
     let flow1 = Flow(room: self,
                      gens: [mlSampler],
                      FX: [[AKPanner(), AKPitchShifter()]],
-                     distThresh: distanceThresholds[0],
+                     distThresh: distanceThresholds[1],
                      pos: [-0.5, 0.3, -1])
     
     flows.append(flow1)
@@ -138,7 +139,7 @@ class RoomGuitar: Room {
     let flow2 = Flow(room: self,
                      gens: [mhSampler],
                      FX: [[AKPanner(), AKPitchShifter()]],
-                     distThresh: distanceThresholds[0],
+                     distThresh: distanceThresholds[1],
                      pos: [-0.5, 0.3, -1])
     
     flows.append(flow2)
