@@ -143,6 +143,15 @@ class Conductor: NSObject {
     }
   }
   
+  @objc(teleport:)
+  func teleport(newOrigin: NSArray){
+    for room in rooms{
+      for flow in room.flows {
+        flow.teleport(origin: newOrigin as! [Double])
+      }
+    }
+  }
+  
   @objc(tearDown)
   func tearDown() {
     print("000_ CALLED TEAR DOWN")

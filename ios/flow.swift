@@ -19,6 +19,7 @@ class Flow {
   var generators = [AKNode]()
   
   private var position = [0.0, 0.0, 0.0]
+  private let anchor : [Double]
   private var output = AKMixer()
   
   // Mark - initialisation
@@ -26,6 +27,7 @@ class Flow {
     
     distanceThreshold = distThresh
     position = pos
+    anchor = position
     
     generators = gens
     if FX != nil {
@@ -83,9 +85,6 @@ class Flow {
     return pan
   }
   
-  
-  // Mark - private functionality
-  
   func startGens(){
     for generator in generators {
       if let gen = generator as? AKOscillator {
@@ -99,6 +98,16 @@ class Flow {
     }
     
   }
+  
+  func teleport(origin: [Double]){
+    let x = origin[0] + anchor[0]
+    let y = origin[1] + anchor[1]
+    let z = origin[2] + anchor[2]
+    
+    position = [x, y, z]
+    
+  }
+  
   
   
   

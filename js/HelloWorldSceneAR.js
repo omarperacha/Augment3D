@@ -121,6 +121,7 @@ export default class HelloWorldSceneAR extends Component {
                       section : newSec,
                       origin : [0,0,2]
                       });
+        this.conductor.teleport([0,0,2])
     }
     
 }
