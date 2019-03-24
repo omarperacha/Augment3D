@@ -80,14 +80,16 @@ export default class ViroSample extends Component {
 
           <TouchableHighlight style={localStyles.buttons}
             onPress={this._getExperienceButtonOnPress(AR_NAVIGATOR_TYPE)}
-            underlayColor={'#68a0ff'} >
+            underlayColor={'#000000'}
+            >
 
             <Text style={localStyles.buttonText}>Start</Text>
           </TouchableHighlight>
 
           <TouchableHighlight style={localStyles.buttons}
             onPress={this._getExperienceButtonOnPress(VR_NAVIGATOR_TYPE)}
-            underlayColor={'#68a0ff'} >
+            underlayColor={'#000000'}
+            >
 
             <Text style={localStyles.buttonText}>Info</Text>
           </TouchableHighlight>
@@ -148,25 +150,33 @@ var localStyles = StyleSheet.create({
     backgroundColor: "black",
   },
   titleText: {
-    paddingTop: 30,
-    paddingBottom: 20,
+    fontFamily: "Azonix",
+    paddingTop: 5,
+    paddingBottom: 150,
     color:'#fff',
     textAlign:'center',
-    fontSize : 25
+    fontSize : 35,
   },
   buttonText: {
+    fontFamily: "Azonix",
+    color:'#000000',
+    textAlign:'center',
+    fontSize : 20,
+  },
+  buttonTextSelected: {
+    fontFamily: "Azonix",
     color:'#fff',
     textAlign:'center',
-    fontSize : 20
+    fontSize : 20,
   },
   buttons : {
     height: 80,
     width: 150,
-    paddingTop:20,
+    paddingTop:30,
     paddingBottom:20,
     marginTop: 10,
     marginBottom: 10,
-    backgroundColor:'#68a0cf',
+    backgroundColor:'#ffffff',
     borderRadius: 10,
     borderWidth: 1,
     borderColor: '#fff',
@@ -178,7 +188,7 @@ var localStyles = StyleSheet.create({
     paddingBottom:10,
     marginTop: 10,
     marginBottom: 10,
-    backgroundColor:'#68a0cf',
+    backgroundColor:'#ffffff',
     borderRadius: 10,
     borderWidth: 1,
     borderColor: '#fff',

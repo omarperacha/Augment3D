@@ -5,7 +5,6 @@
 	};
 	objectVersion = 46;
 	objects = {
-
 /* Begin PBXBuildFile section */
 		00C302E51ABCBA2D00DB3ED1 /* libRCTActionSheet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302AC1ABCB8CE00DB3ED1 /* libRCTActionSheet.a */; };
 		00C302E71ABCBA2D00DB3ED1 /* libRCTGeolocation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302BA1ABCB90400DB3ED1 /* libRCTGeolocation.a */; };
@@ -61,6 +60,7 @@
 		66002AC5B686977F8D15A192 /* Pods_Augment3d.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9782E3B9148544FDF7AFB9B7 /* Pods_Augment3d.framework */; };
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
 		ADBDB9381DFEBF1600ED6528 /* libRCTBlob.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ADBDB9271DFEBF0700ED6528 /* libRCTBlob.a */; };
+		ABF368E38FC04A2DA2771431 /* Azonix.otf in Resources */ = {isa = PBXBuildFile; fileRef = A586C19B10594C3C8DD639ED /* Azonix.otf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -383,6 +383,7 @@
 		9782E3B9148544FDF7AFB9B7 /* Pods_Augment3d.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Augment3d.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		ADBDB91F1DFEBF0600ED6528 /* RCTBlob.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTBlob.xcodeproj; path = "../node_modules/react-native/Libraries/Blob/RCTBlob.xcodeproj"; sourceTree = "<group>"; };
 		C43BB493302DE2163C39040B /* Pods-Augment3d.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Augment3d.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Augment3d/Pods-Augment3d.debug.xcconfig"; sourceTree = "<group>"; };
+		A586C19B10594C3C8DD639ED /* Azonix.otf */ = {isa = PBXFileReference; name = "Azonix.otf"; path = "../assets/fonts/Azonix.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -642,6 +643,7 @@
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				FE1A633C2E8428A52D37E02C /* Pods */,
+				1D26EE0C8CBA47CF88077EF0 /* Resources */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -676,6 +678,15 @@
 			);
 			name = Pods;
 			sourceTree = "<group>";
+		};
+		1D26EE0C8CBA47CF88077EF0 /* Resources */ = {
+			isa = "PBXGroup";
+			children = (
+				A586C19B10594C3C8DD639ED /* Azonix.otf */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+			path = "";
 		};
 /* End PBXGroup section */
 
@@ -763,7 +774,7 @@
 		83CBB9F71A601CBA00E9B192 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0940;
+				LastUpgradeCheck = 940;
 				ORGANIZATIONNAME = Facebook;
 				TargetAttributes = {
 					00E356ED1AD99517003FC87E = {
@@ -1151,6 +1162,7 @@
 				5911F1172246889300BBA36E /* death clock hi.m4a in Resources */,
 				59E3722B22348CD900C6D3D2 /* alien hi.m4a in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
+				ABF368E38FC04A2DA2771431 /* Azonix.otf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

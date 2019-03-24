@@ -11,7 +11,12 @@
     "react": "16.6.1",
     "react-native": "0.57.7",
     "react-viro": "2.13.0"
-  },
+  }, 
+"rnpm": {
+    "assets": [
+	"./assets/fonts/"
+    ]
+},
   "devDependencies": {
     "babel-jest": "24.1.0",
     "jest": "24.1.0",
