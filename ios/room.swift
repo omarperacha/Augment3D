@@ -32,7 +32,7 @@ class RoomConv: Room {
                      gens: [AKMorphingOscillator(waveformArray: tables)],
                      FX: [[conv, convHP, convReduce, AKPeakLimiter()]],
                      distThresh: distanceThresholds[0],
-                     pos: [0.5, 0, -3.5])
+                     pos: [0.5, 0, -3.0])
     
     flows.append(flow0)
     
@@ -83,7 +83,7 @@ class RoomConv: Room {
 // MARK -- Guitar Room
 class RoomGuitar: Room {
   
-  private let distanceThresholds = [1.5]
+  private let distanceThresholds = [1.0]
   private let dcBaseRate = 350
   
   private var callCount = 350
@@ -115,7 +115,7 @@ class RoomGuitar: Room {
                           [AKCostelloReverb(feedback: 0.9, cutoffFrequency: 1000)],
                           [AKCostelloReverb(feedback: 0.9, cutoffFrequency: 1000)]],
                      distThresh: distanceThresholds[0],
-                     pos: [0, 0, -1.5])
+                     pos: [0, 0, -1.0])
     
     flows.append(flow0)
     
@@ -127,7 +127,7 @@ class RoomGuitar: Room {
                      gens: [mlSampler],
                      FX: [[AKPanner(), AKPitchShifter()]],
                      distThresh: distanceThresholds[0],
-                     pos: [-0.5, 0.3, -1.25])
+                     pos: [-0.5, 0.3, -1])
     
     flows.append(flow1)
     
@@ -139,7 +139,7 @@ class RoomGuitar: Room {
                      gens: [mhSampler],
                      FX: [[AKPanner(), AKPitchShifter()]],
                      distThresh: distanceThresholds[0],
-                     pos: [-0.5, 0.3, -1.25])
+                     pos: [-0.5, 0.3, -1])
     
     flows.append(flow2)
     
@@ -156,7 +156,7 @@ class RoomGuitar: Room {
     let flow0 = flows[0]
     let distance = flow0.calculateDist(pos: pos as! [Double])
     
-    if (pos[2] as! Double) < -1.5 || distance > flow0.distanceThreshold {
+    if (pos[2] as! Double) < -1 || distance > flow0.distanceThreshold {
       callCount = 0
     } else {
       callCount += 1
@@ -189,7 +189,7 @@ class RoomGuitar: Room {
     // hi samplers
     for i in 1...2 {
       
-      if distance > distanceThresholds[0] || (pos[2] as! Double) < -2.5 {
+      if distance > distanceThresholds[0] {
         flow0.genMixers[i].volume = 0
       } else {
       
@@ -223,7 +223,7 @@ class RoomGuitar: Room {
         pitchFactorLo = 0.875 + ((flow.distanceThreshold - distance)/2)
       } else if currentFlow == 2 {
         basePitchHi = 5.25 * (1 - (distance/flow.distanceThreshold))
-        pitchFactorHi = 0.875 + ((flow.distanceThreshold - distance))
+        pitchFactorHi = 1.75 + ((flow.distanceThreshold - distance))
       }
       
     }
@@ -258,7 +258,7 @@ class RoomGuitar: Room {
   }
   
   func playSamplerHi(){
-    var pitchshift = pitchFactorHi * (Int.random(in: 0 ..< 5))
+    var pitchshift = pitchFactorHi * (Int.random(in: 0 ..< 7))
     pitchshift += basePitchHi
     
     if let pitchShifter = flows[2].effects[0][1] as? AKPitchShifter {
@@ -299,7 +299,7 @@ class RoomGuitar: Room {
 // MARK -- Bass Room
 class RoomBass: Room {
   
-  private let distanceThresholds = [1.8]
+  private let distanceThresholds = [1.6]
   
   private var tables = [AKTable]()
   
@@ -340,7 +340,7 @@ class RoomBass: Room {
                       AKBooster(gain: 1),
                       AKCostelloReverb()]],
                     distThresh: distanceThresholds[0],
-                    pos: [-3.5, -1.05, -1.75])
+                    pos: [-3.5, -1.3, -1.75])
     
     flows.append(flow)
   }
