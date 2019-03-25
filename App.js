@@ -48,7 +48,8 @@ export default class ViroSample extends Component {
     this.state = {
       navigatorType : defaultNavigatorType,
       sharedProps : sharedProps,
-      selected: false
+      selected: false,
+      infoSelected: false
     }
     this._getExperienceSelector = this._getExperienceSelector.bind(this);
     this._getARNavigator = this._getARNavigator.bind(this);
@@ -56,6 +57,7 @@ export default class ViroSample extends Component {
     this._getExperienceButtonOnPress = this._getExperienceButtonOnPress.bind(this);
     this._exitViro = this._exitViro.bind(this);
     this._textStyle = this._textStyle.bind(this);
+    this._infoTextStyle = this._infoTextStyle.bind(this);
   }
 
   // Replace this function with the contents of _getVRNavigator() or _getARNavigator()
@@ -93,9 +95,11 @@ export default class ViroSample extends Component {
           <TouchableHighlight style={localStyles.buttons}
             onPress={this._getExperienceButtonOnPress(VR_NAVIGATOR_TYPE)}
             underlayColor={'#000000'}
+            onShowUnderlay={() => this.setState({infoSelected: true})}
+            onHideUnderlay={() => this.setState({infoSelected: false})}
             >
 
-            <Text style={localStyles.buttonText}>Info</Text>
+            <Text style={this._infoTextStyle()}>Info</Text>
           </TouchableHighlight>
         </View>
       </View>
@@ -105,6 +109,10 @@ export default class ViroSample extends Component {
   _textStyle() {
     return this.state.selected ? localStyles.buttonTextSelected : localStyles.buttonText;
   }
+    
+  _infoTextStyle() {
+        return this.state.infoSelected ? localStyles.buttonTextSelected : localStyles.buttonText;
+    }
 
   // Returns the ViroARSceneNavigator which will start the AR experience
   _getARNavigator() {
