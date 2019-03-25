@@ -8,7 +8,6 @@ import {
   ViroARScene,
   ViroText,
   ViroConstants,
-    ViroCamera,
     ViroBox,
     ViroPolyline,
     ViroSphere,
@@ -25,6 +24,8 @@ export default class HelloWorldSceneAR extends Component {
         appState: AppState.currentState,
         origin: [0,0,0]
     };
+      
+      this.camPos = [0,0,0]
 
       this.conductor = NativeModules.Conductor
     // bind 'this' to functions
@@ -38,6 +39,7 @@ export default class HelloWorldSceneAR extends Component {
       this._teleport3 = this._teleport3.bind(this);
       this._teleport4 = this._teleport4.bind(this);
       this._teleport5 = this._teleport5.bind(this);
+      this._normaliseTeleportVec = this._normaliseTeleportVec.bind(this);
       this._getPos = this._getPos.bind(this);
   }
 
@@ -92,6 +94,7 @@ export default class HelloWorldSceneAR extends Component {
     _update(cameraTransform) {
         const pos = cameraTransform.position;
         const forward = cameraTransform.forward;
+        this.camPos = pos
         this.conductor.updateAmp(pos, forward);
     }
     
@@ -119,7 +122,7 @@ export default class HelloWorldSceneAR extends Component {
     }
     
     _teleport1(position, source){
-        const toLocation = [0,0,0]
+        const toLocation = this._normaliseTeleportVec([0,0,0])
         this.setState({
                       origin : toLocation
                       });
@@ -127,7 +130,7 @@ export default class HelloWorldSceneAR extends Component {
     }
     
     _teleport2(position, source){
-        const toLocation = [-0.8,0,2]
+        const toLocation = this._normaliseTeleportVec([-0.8,0,2])
         this.setState({
                       origin : toLocation
                       });
@@ -135,7 +138,7 @@ export default class HelloWorldSceneAR extends Component {
     }
     
     _teleport3(position, source){
-        const toLocation = [1,0,3]
+        const toLocation = this._normaliseTeleportVec([1,0,3])
         this.setState({
                       origin : toLocation
                       });
@@ -143,7 +146,7 @@ export default class HelloWorldSceneAR extends Component {
     }
     
     _teleport4(position, source){
-        const toLocation = [2.7,0,1.75]
+        const toLocation = this._normaliseTeleportVec([2.7,0,1.75])
         this.setState({
                       origin : toLocation
                       });
@@ -151,11 +154,19 @@ export default class HelloWorldSceneAR extends Component {
     }
     
     _teleport5(position, source){
-        const toLocation = [3,0,0]
+        const toLocation = this._normaliseTeleportVec([3,0,0])
         this.setState({
                       origin : toLocation
                       });
         this.conductor.teleport(toLocation)
+    }
+    
+    _normaliseTeleportVec(offset){
+        const x = offset[0] + this.camPos[0];
+        const y = offset[1] + this.camPos[1];
+        const z = offset[2] + this.camPos[2];
+        
+        return [x, y, z]
     }
     
 }
