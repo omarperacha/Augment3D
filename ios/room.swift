@@ -402,7 +402,7 @@ class RoomBass: Room {
 // MARK -- Alien Room
 class RoomAlien: Room {
   
-  private let distanceThresholds = [0.9, 1.8]
+  private let distanceThresholds = [0.8, 1.8]
   private let delFB = 0.22
   private let delLP = 1000.0
   private let delT = 1.75
@@ -518,6 +518,10 @@ class RoomAlien: Room {
         del.lowPassCutoff = delLP + ((distanceThresholds[1] - dist2) * (3*delLP))
       }
       
+      if distance > distanceThresholds[0] {
+        flow.drywets[0][2].balance = max(0, delFB - (distance - distanceThresholds[0]))
+      }
+      
       var _yaw = yaw
       if gravY > 0 {
         let negative = (yaw < 0)
@@ -615,9 +619,14 @@ class RoomPure: Room {
     let mixer0 = AKMixer(oscs0)
     mixer0.volume = 1
     
+    let fileUrl = Bundle(for: type(of: self)).url(forResource: "death clock hi", withExtension:"m4a")
+    let  file = try! AKAudioFile(forReading: fileUrl!)
+    let sampler = AKWaveTable(file: file)
+    
     let flow0 = Flow(room: self,
-                     gens: [noise, mixer0],
-                     FX: [[AKKorgLowPassFilter(cutoffFrequency: 30, resonance: 1.4, saturation: 1.1)],[AKCostelloReverb()]],
+                     gens: [noise, mixer0, sampler],
+                     FX: [[AKKorgLowPassFilter(cutoffFrequency: 30, resonance: 1.4, saturation: 1.1)],[AKCostelloReverb()],
+                          [AKCostelloReverb()]],
                      distThresh: self.distanceThresholds[0], pos: [-3, 0, 1])
     flows.append(flow0)
     
@@ -655,13 +664,17 @@ class RoomPure: Room {
     let flow = flows[0]
     
     let vol = 0.5
+    let vol2 = 0.3
+    let vol3 = 0.6
     let distance = flow.calculateDist(pos: pos as! [Double])
     let distance1 = flows[1].calculateDist(pos: pos as! [Double])
     let distance2 = flows[2].calculateDist(pos: pos as! [Double])
     
-    flow.genMixers[0].volume = (distance < (flow.distanceThreshold - 0.2) ? vol : max(0, ((flow.distanceThreshold - distance)/0.2*vol)))*(-1*(forward))
+    flow.genMixers[0].volume = (distance < (flow.distanceThreshold - 0.2) ? vol*(-1*(forward)) : max(0, ((flow.distanceThreshold - distance)/0.2*vol)))*(-1*(forward))
     
-    flow.genMixers[1].volume = 0.3 * max(0, (distanceThresholds[0] - distance))*(min(1, forward+0.25))
+    flow.genMixers[1].volume = vol2 * max(0, (distanceThresholds[0] - distance))*(min(1, forward+0.25))
+    
+    flow.genMixers[2].volume = vol2 * max(0, (distanceThresholds[1] - distance))*(-1*(forward))
     
     if let filter = flow.effects[0][0] as? AKKorgLowPassFilter {
       filter.cutoffFrequency = 30 + ((distanceThresholds[0] - distance) * 2000)
@@ -708,6 +721,11 @@ class RoomPure: Room {
     
     if let noise = flows[0].generators[0] as? AKWhiteNoise {
       noise.start()
+    }
+    
+    if let samp = flows[0].generators[2] as? AKWaveTable {
+      samp.loopEnabled = true
+      samp.start()
     }
   }
 }
