@@ -47,9 +47,9 @@ export default class HelloWorldSceneAR extends Component {
     return (
             <ViroARScene onTrackingUpdated={this._onInitialized} onCameraTransformUpdate={this._update}>
             < // guitar
-            ViroBox position={this._getPos([0, 0, -1])} scale={[.3, .3, .3]} onClick={this._teleport1}/>
-            <ViroBox position={this._getPos([0.5, 0.3, -1])} scale={[.22, .22, .22]} rotation={[20, -30, 0]} materials={["black"]} onClick={this._onTouchMetalHi} />
-            <ViroBox position={this._getPos([-0.5, 0.3, -1])} scale={[.22, .22, .22]} rotation={[20, 30, 0]} materials={["black"]} onClick={this._onTouchMetalLo} />
+            ViroBox position={this._getPos([0, 0, -1])} scale={[.22, .22, .22]} onClick={this._teleport1}/>
+            <ViroBox position={this._getPos([0.5, 0.3, -1])} scale={[.15, .15, .15]} rotation={[20, -30, 0]} materials={["black"]} onClick={this._onTouchMetalHi} />
+            <ViroBox position={this._getPos([-0.5, 0.3, -1])} scale={[.15, .15, .15]} rotation={[20, 30, 0]} materials={["black"]} onClick={this._onTouchMetalLo} />
             < // pure
             ViroPolyline position={this._getPos([-3, 0, 1])} points={[[0,-1,0], [0,1,0.15]]} thickness={0.2} onClick={this._teleport5}/>
             <ViroPolyline position={this._getPos([-1.9, 0, 0])} points={[[0,-1,0], [-0.15,1,0.15]]} thickness={0.2} onClick={this._teleport5}/>
@@ -138,7 +138,7 @@ export default class HelloWorldSceneAR extends Component {
     }
     
     _teleport3(position, source){
-        const toLocation = this._normaliseTeleportVec([0.3,0,2.7])
+        const toLocation = this._normaliseTeleportVec([0.6,0,2.7])
         this.setState({
                       origin : toLocation
                       });

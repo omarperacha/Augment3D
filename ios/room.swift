@@ -87,7 +87,7 @@ class RoomGuitar: Room {
   private let distanceThresholds = [1.1, 1.25]
   private let dcBaseRate = 420
   
-  private var callCount = 420
+  private var callCount = 400
   private var dcModuLo = 500
   private var basePitchLo = 0.0
   private var pitchFactorLo = 1.0
