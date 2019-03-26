@@ -55,7 +55,7 @@ export default class HelloWorldSceneAR extends Component {
             <ViroPolyline position={this._getPos([-1.9, 0, 0])} points={[[0,-1,0], [-0.15,1,0.15]]} thickness={0.2} onClick={this._teleport5}/>
             <ViroPolyline position={this._getPos([-4.1, 0, 0])} points={[[0,-1,0], [0.15,1,0.15]]} thickness={0.2} onClick={this._teleport5}/>
             < // bass
-            ViroPolyline position={this._getPos([-3.5, -1.3, -1.75])} points={[[-.5,0,-.5], [0,.5,0], [.5,0,-.5], [0,.5,-1], [-.5,0,-.5]]} thickness={0.1} onClick={this._teleport4}/>
+            ViroPolyline position={this._getPos([-3.8, -1.3, -1.75])} points={[[-.5,0,-.5], [0,.5,0], [.5,0,-.5], [0,.5,-1], [-.5,0,-.5]]} thickness={0.1} onClick={this._teleport4}/>
             < // alien
             ViroSphere position={this._getPos([-1.5, -0.2, -3.5])} radius={.25} onClick={this._teleport3}/>
             <ViroSphere position={this._getPos([-1.5, -0.2, -2.5])} radius={.25} onClick={this._teleport3}/>
@@ -138,7 +138,7 @@ export default class HelloWorldSceneAR extends Component {
     }
     
     _teleport3(position, source){
-        const toLocation = this._normaliseTeleportVec([1,0,3])
+        const toLocation = this._normaliseTeleportVec([0.3,0,2.7])
         this.setState({
                       origin : toLocation
                       });
@@ -146,7 +146,7 @@ export default class HelloWorldSceneAR extends Component {
     }
     
     _teleport4(position, source){
-        const toLocation = this._normaliseTeleportVec([2.7,0,1.75])
+        const toLocation = this._normaliseTeleportVec([3,0,1.75])
         this.setState({
                       origin : toLocation
                       });

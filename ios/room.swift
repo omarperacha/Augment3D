@@ -32,7 +32,7 @@ class RoomConv: Room {
                      gens: [AKMorphingOscillator(waveformArray: tables)],
                      FX: [[conv, convHP, convReduce, AKPeakLimiter()]],
                      distThresh: distanceThresholds[0],
-                     pos: [0.5, 0, -3.0])
+                     pos: [0.8, 0, -3.0])
     
     flows.append(flow0)
     
@@ -84,7 +84,7 @@ class RoomConv: Room {
 // MARK -- Guitar Room
 class RoomGuitar: Room {
   
-  private let distanceThresholds = [1.0, 1.25]
+  private let distanceThresholds = [1.1, 1.25]
   private let dcBaseRate = 420
   
   private var callCount = 420
@@ -341,7 +341,7 @@ class RoomBass: Room {
                       AKBooster(gain: 1),
                       AKCostelloReverb()]],
                     distThresh: distanceThresholds[0],
-                    pos: [-3.5, -1.3, -1.75])
+                    pos: [-3.8, -1.3, -1.75])
     
     flows.append(flow)
   }
@@ -402,7 +402,7 @@ class RoomBass: Room {
 // MARK -- Alien Room
 class RoomAlien: Room {
   
-  private let distanceThresholds = [0.95, 1.8]
+  private let distanceThresholds = [0.9, 1.8]
   private let delFB = 0.22
   private let delLP = 1000.0
   private let delT = 1.75
@@ -513,7 +513,7 @@ class RoomAlien: Room {
       let distance = flow.calculateDist(pos: pos as! [Double])
       let dist2 = flows[2].calculateDist(pos: pos as! [Double])
     
-      flow.genMixers[0].volume = (1 - (distance/(flow.distanceThreshold)))
+      flow.genMixers[0].volume = 0.65 * (1 - (distance/(flow.distanceThreshold)))
       if let del = flow.effects[0][2] as? AKDelay {
         del.lowPassCutoff = delLP + ((distanceThresholds[1] - dist2) * (3*delLP))
       }
@@ -659,9 +659,9 @@ class RoomPure: Room {
     let distance1 = flows[1].calculateDist(pos: pos as! [Double])
     let distance2 = flows[2].calculateDist(pos: pos as! [Double])
     
-    flow.genMixers[0].volume = (distance < (flow.distanceThreshold - 0.2) ? vol : max(0, ((flow.distanceThreshold - distance)/0.2*vol)))*(-1*forward)
+    flow.genMixers[0].volume = (distance < (flow.distanceThreshold - 0.2) ? vol : max(0, ((flow.distanceThreshold - distance)/0.2*vol)))*(min(1, -1*(forward+0.25)))
     
-    flow.genMixers[1].volume = 0.3 * max(0, (distanceThresholds[0] - distance))*(forward)
+    flow.genMixers[1].volume = 0.3 * max(0, (distanceThresholds[0] - distance))*(min(1, forward+0.25))
     
     if let filter = flow.effects[0][0] as? AKKorgLowPassFilter {
       filter.cutoffFrequency = 30 + ((distanceThresholds[0] - distance) * 2000)
