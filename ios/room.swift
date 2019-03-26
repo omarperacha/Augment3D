@@ -674,7 +674,7 @@ class RoomPure: Room {
     
     flow.genMixers[1].volume = vol2 * max(0, (distanceThresholds[0] - distance))*(min(1, forward+0.25))
     
-    flow.genMixers[2].volume = vol2 * max(0, (distanceThresholds[1] - distance))*(-1*(forward))
+    flow.genMixers[2].volume = vol3 * max(0, (distanceThresholds[1] - distance))*(-1*(forward))
     
     if let filter = flow.effects[0][0] as? AKKorgLowPassFilter {
       filter.cutoffFrequency = 30 + ((distanceThresholds[0] - distance) * 2000)

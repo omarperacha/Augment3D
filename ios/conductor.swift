@@ -39,6 +39,8 @@ class Conductor: NSObject {
     }
     
     AKSettings.playbackWhileMuted = true
+    AKSettings.allowAirPlay = true
+    AKSettings.useBluetooth = true
     
     let roomConv = RoomConv()
     rooms.append(roomConv)
