@@ -18,7 +18,6 @@ import {
 } from 'react-native';
 
 import {
-  ViroVRSceneNavigator,
   ViroARSceneNavigator
 } from 'react-viro';
 
@@ -31,7 +30,6 @@ var sharedProps = {
 
 // Sets the default scene you want for AR and VR
 var InitialARScene = require('./js/HelloWorldSceneAR');
-var InitialVRScene = require('./js/HelloWorldScene');
 
 var UNSET = "UNSET";
 var VR_NAVIGATOR_TYPE = "VR";
@@ -125,8 +123,18 @@ export default class ViroSample extends Component {
   // Returns the ViroSceneNavigator which will start the VR experience
   _getVRNavigator() {
     return (
-      <ViroVRSceneNavigator {...this.state.sharedProps}
-        initialScene={{scene: InitialVRScene}} onExitViro={this._exitViro}/>
+      <View style={localStyles.infoPage}>
+            <TouchableHighlight style={localStyles.exitButton}
+            onPress={this._exitViro}
+            underlayColor={'#000000'}
+            onShowUnderlay={() => this.setState({infoSelected: true})}
+            onHideUnderlay={() => this.setState({infoSelected: false})}
+            >
+            
+            <Text style={this._infoTextStyle()}>{"<"}</Text>
+            </TouchableHighlight>
+            <Text style={localStyles.titleText}>About</Text>
+        </View>
     );
   }
 
@@ -135,7 +143,8 @@ export default class ViroSample extends Component {
   _getExperienceButtonOnPress(navigatorType) {
     return () => {
       this.setState({
-        navigatorType : navigatorType
+        navigatorType : navigatorType,
+        infoSelected: false
      })
     }
   }
@@ -143,7 +152,8 @@ export default class ViroSample extends Component {
   // This function "exits" Viro by setting the navigatorType to UNSET.
   _exitViro() {
     this.setState({
-      navigatorType : UNSET
+      navigatorType : UNSET,
+      infoSelected: false
     })
   }
 }
@@ -165,6 +175,11 @@ var localStyles = StyleSheet.create({
     alignItems:'center',
     backgroundColor: "black",
   },
+                                    infoPage: {
+                                    flex : 1,
+                                    flexDirection: 'column',
+                                    backgroundColor: "black",
+                                    },
   titleText: {
     fontFamily: "Azonix",
     paddingTop: 5,
@@ -198,11 +213,12 @@ var localStyles = StyleSheet.create({
     borderColor: '#fff',
   },
   exitButton : {
-    height: 50,
-    width: 100,
-    paddingTop:10,
-    paddingBottom:10,
-    marginTop: 10,
+    height: 30,
+    width: 30,
+    paddingTop:5,
+    paddingBottom:5,
+    marginTop: 40,
+    marginLeft: 20,
     marginBottom: 10,
     backgroundColor:'#ffffff',
     borderRadius: 10,
