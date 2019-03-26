@@ -74,7 +74,7 @@ class RoomConv: Room {
     }
     
     let conv = flow.drywets[0][0]
-    let convMul = distance < (flow.distanceThreshold - 0.1) ? 1 : max(0, ((flow.distanceThreshold - distance)/0.1))
+    let convMul = distance < ((flow.distanceThreshold + 0.2) - 0.3) ? 1 : max(0, (((flow.distanceThreshold + 0.2) - distance)/0.3))
     conv.balance = max(0.01, (_yaw/4) + 0.25) * convMul
   }
   
@@ -157,7 +157,7 @@ class RoomGuitar: Room {
     let flow0 = flows[0]
     let distance = flow0.calculateDist(pos: pos as! [Double])
     
-    if (pos[2] as! Double) < -1 || distance > flow0.distanceThreshold {
+    if (pos[2] as! Double) < flow0.position[2] || distance > flow0.distanceThreshold {
       callCount = 0
     } else {
       callCount += 1

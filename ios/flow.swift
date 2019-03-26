@@ -18,7 +18,7 @@ class Flow {
   var genMixers = [AKMixer]()
   var generators = [AKNode]()
   
-  private var position = [0.0, 0.0, 0.0]
+  private(set) var position = [0.0, 0.0, 0.0]
   private let anchor : [Double]
   private var output = AKMixer()
   
