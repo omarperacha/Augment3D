@@ -61,7 +61,8 @@ export default class HelloWorldSceneAR extends Component {
             <ViroSphere position={this._getPos([-1.5, -0.2, -2.5])} radius={.25} onClick={this._teleport3}/>
             <ViroSphere position={this._getPos([-2.3, 0.2, -3])} radius={.15} materials={["black"]} onClick={this._onTouchAlien} />
             < // conv
-            ViroBox position={this._getPos([0.8, 0, -3])} scale={[.3, .3, .3]} onClick={this._teleport2}/>
+            ViroBox position={this._getPos([0.8, 0, -3])} scale={[.3, .01, .3]} rotation={[0, 20, 30]} thickness={0.3} onClick={this._teleport2}/>
+            <ViroBox position={this._getPos([0.8, 0, -3])} scale={[.3, .01, .3]} rotation={[0, 20, -30]} thickness={0.3} onClick={this._teleport2}/>
       </ViroARScene>
     );
   }
