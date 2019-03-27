@@ -670,11 +670,11 @@ class RoomPure: Room {
     let distance1 = flows[1].calculateDist(pos: pos as! [Double])
     let distance2 = flows[2].calculateDist(pos: pos as! [Double])
     
-    flow.genMixers[0].volume = (distance < (flow.distanceThreshold - 0.2) ? vol*(-1*(forward)) : max(0, ((flow.distanceThreshold - distance)/0.2*vol)))*(-1*(forward))
+    flow.genMixers[0].volume = (distance < (flow.distanceThreshold - 0.2) ? vol : max(0, ((flow.distanceThreshold - distance)/0.2*vol)))*(-1*(forward))
     
     flow.genMixers[1].volume = vol2 * max(0, (distanceThresholds[0] - distance))*(min(1, forward+0.25))
     
-    flow.genMixers[2].volume = vol3 * max(0, (distanceThresholds[1] - distance))*(-1*(forward))
+    flow.genMixers[2].volume = vol3 * max(0, (distanceThresholds[1] - distance))*(min(1, forward+0.25))
     
     if let filter = flow.effects[0][0] as? AKKorgLowPassFilter {
       filter.cutoffFrequency = 30 + ((distanceThresholds[0] - distance) * 2000)
