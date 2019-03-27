@@ -47,7 +47,9 @@ export default class ViroSample extends Component {
       navigatorType : defaultNavigatorType,
       sharedProps : sharedProps,
       selected: false,
-      infoSelected: false
+      infoSelected: false,
+    infoText1: ''
+        
     }
     this._getExperienceSelector = this._getExperienceSelector.bind(this);
     this._getARNavigator = this._getARNavigator.bind(this);
@@ -133,7 +135,18 @@ export default class ViroSample extends Component {
             
             <Text style={this._infoTextStyle()}>{"<"}</Text>
             </TouchableHighlight>
-            <Text style={localStyles.titleText}>About</Text>
+            <Text style={localStyles.titleTextInfo}>About</Text>
+            <Text style={localStyles.textBody}>{this.state.infoText1}
+            </Text>
+            <TouchableHighlight style={localStyles.exitButton}
+            onPress={this._exitViro}
+            underlayColor={'#000000'}
+            onShowUnderlay={() => this.setState({infoSelected: true})}
+            onHideUnderlay={() => this.setState({infoSelected: false})}
+            >
+            
+            <Text style={this._infoTextStyle()}>{">"}</Text>
+            </TouchableHighlight>
         </View>
     );
   }
@@ -144,7 +157,8 @@ export default class ViroSample extends Component {
     return () => {
       this.setState({
         navigatorType : navigatorType,
-        infoSelected: false
+        infoSelected: false,
+                    infoText1 : 'Augment3D is an interactive piece of music powered by\nAR\n\nPress START in the main menu to see virtual objects placed in the world around you\n\nExplore the objects and the sounds they make by moving towards them. Interact with the music by exploring different spaces near the objects and rotating your device screen'
      })
     }
   }
@@ -153,10 +167,13 @@ export default class ViroSample extends Component {
   _exitViro() {
     this.setState({
       navigatorType : UNSET,
-      infoSelected: false
+      infoSelected: false,
+      infoText1 : 'Augment3D is an interactive piece of music powered by\nAR\n\nPress START in the main menu to see virtual objects placed in the world around you\n\nExplore the objects and the sounds they make by moving towards them. Interact with the music by exploring different spaces near the objects and rotating your device screen'
     })
   }
+
 }
+
 
 var localStyles = StyleSheet.create({
   viroContainer :{
@@ -188,6 +205,15 @@ var localStyles = StyleSheet.create({
     textAlign:'center',
     fontSize : 35,
   },
+                                    
+                                    titleTextInfo: {
+                                    fontFamily: "Azonix",
+                                    paddingTop: 5,
+                                    paddingBottom: 75,
+                                    color:'#fff',
+                                    textAlign:'center',
+                                    fontSize : 35,
+                                    },
   buttonText: {
     fontFamily: "Azonix",
     color:'#000000',
@@ -200,6 +226,14 @@ var localStyles = StyleSheet.create({
     textAlign:'center',
     fontSize : 20,
   },
+                                    textBody: {
+                                    fontFamily: "Courier New",
+                                    color:'#fff',
+                                    textAlign:'center',
+                                    marginLeft: 20,
+                                    marginRight: 20,
+                                    fontSize : 18,
+                                    },
   buttons : {
     height: 80,
     width: 150,
