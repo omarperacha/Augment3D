@@ -40,8 +40,9 @@
 		5911F1182246889300BBA36E /* death clock hi.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 5911F0F02246889300BBA36E /* death clock hi.m4a */; };
 		5911F1192246889300BBA36E /* freaky hi.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 5911F1162246889300BBA36E /* freaky hi.m4a */; };
 		5911F11A2246889300BBA36E /* freaky hi.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 5911F1162246889300BBA36E /* freaky hi.m4a */; };
-		5911F11C2246981800BBA36E /* OP presents II.png in Resources */ = {isa = PBXBuildFile; fileRef = 5911F11B2246981800BBA36E /* OP presents II.png */; };
-		5911F11D2246981800BBA36E /* OP presents II.png in Resources */ = {isa = PBXBuildFile; fileRef = 5911F11B2246981800BBA36E /* OP presents II.png */; };
+		5932A819224C4F5D002E7130 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
+		5932A81B224C4FEE002E7130 /* OP presents II.png in Resources */ = {isa = PBXBuildFile; fileRef = 5932A81A224C4FEE002E7130 /* OP presents II.png */; };
+		5932A81C224C4FEE002E7130 /* OP presents II.png in Resources */ = {isa = PBXBuildFile; fileRef = 5932A81A224C4FEE002E7130 /* OP presents II.png */; };
 		59679893224AD6F500B28B93 /* guitar dry.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 5967986D224AD6F500B28B93 /* guitar dry.m4a */; };
 		59679894224AD6F500B28B93 /* guitar dry.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 5967986D224AD6F500B28B93 /* guitar dry.m4a */; };
 		59B9C492222A0527004BDB6F /* conductor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59B9C491222A0527004BDB6F /* conductor.swift */; };
@@ -367,7 +368,7 @@
 		2D16E6891FA4F8E400B85C8A /* libReact.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libReact.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		5911F0F02246889300BBA36E /* death clock hi.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = "death clock hi.m4a"; sourceTree = "<group>"; };
 		5911F1162246889300BBA36E /* freaky hi.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = "freaky hi.m4a"; sourceTree = "<group>"; };
-		5911F11B2246981800BBA36E /* OP presents II.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "OP presents II.png"; sourceTree = "<group>"; };
+		5932A81A224C4FEE002E7130 /* OP presents II.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "OP presents II.png"; sourceTree = "<group>"; };
 		5967986D224AD6F500B28B93 /* guitar dry.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = "guitar dry.m4a"; sourceTree = "<group>"; };
 		59B9C490222A0526004BDB6F /* Augment3d-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Augment3d-Bridging-Header.h"; sourceTree = "<group>"; };
 		59B9C491222A0527004BDB6F /* conductor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = conductor.swift; sourceTree = "<group>"; };
@@ -527,7 +528,7 @@
 		13B07FAE1A68108700A75B9A /* Augment3d */ = {
 			isa = PBXGroup;
 			children = (
-				5911F11B2246981800BBA36E /* OP presents II.png */,
+				5932A81A224C4FEE002E7130 /* OP presents II.png */,
 				59EEB8F2222C4D550089C065 /* Sounds */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
@@ -778,8 +779,9 @@
 		83CBB9F71A601CBA00E9B192 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				CLASSPREFIX = OP;
 				LastUpgradeCheck = 940;
-				ORGANIZATIONNAME = Facebook;
+				ORGANIZATIONNAME = "Omar Peracha";
 				TargetAttributes = {
 					00E356ED1AD99517003FC87E = {
 						CreatedOnToolsVersion = 6.2;
@@ -1140,8 +1142,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				5911F11A2246889300BBA36E /* freaky hi.m4a in Resources */,
+				5932A819224C4F5D002E7130 /* Images.xcassets in Resources */,
 				59E3722C22348CD900C6D3D2 /* alien hi.m4a in Resources */,
-				5911F11D2246981800BBA36E /* OP presents II.png in Resources */,
+				5932A81C224C4FEE002E7130 /* OP presents II.png in Resources */,
 				59E3722422348CD900C6D3D2 /* metal lo.m4a in Resources */,
 				59E3722E22348CD900C6D3D2 /* death clock lo.wav in Resources */,
 				59EEB91A222C510E0089C065 /* Locked bass IR_1.wav in Resources */,
@@ -1156,11 +1159,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5932A81B224C4FEE002E7130 /* OP presents II.png in Resources */,
 				59E3722D22348CD900C6D3D2 /* death clock lo.wav in Resources */,
 				59679893224AD6F500B28B93 /* guitar dry.m4a in Resources */,
 				59E3722922348CD900C6D3D2 /* alien lo.m4a in Resources */,
 				59E3722522348CD900C6D3D2 /* metal hi.m4a in Resources */,
-				5911F11C2246981800BBA36E /* OP presents II.png in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				5911F1192246889300BBA36E /* freaky hi.m4a in Resources */,
 				59EEB919222C4D550089C065 /* Locked bass IR_1.wav in Resources */,
