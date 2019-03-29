@@ -1205,7 +1205,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh";
+			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh\n";
 		};
 		03CAC593609DAE5462E49FF0 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1465,6 +1465,14 @@
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 255A692Y6K;
 				ENABLE_BITCODE = NO;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"${PODS_ROOT}/Headers/Public\"",
+					"\"${PODS_ROOT}/Headers/Public/GVRAudioSDK\"",
+					"\"${PODS_ROOT}/Headers/Public/GVRSDK\"",
+					"\"${PODS_ROOT}/Headers/Public/ViroReact\"",
+					"$(SRCROOT)/../node_modules/react-native/Libraries/LinkingIOS",
+				);
 				INFOPLIST_FILE = Augment3d/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
@@ -1491,6 +1499,14 @@
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 255A692Y6K;
 				ENABLE_BITCODE = NO;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"${PODS_ROOT}/Headers/Public\"",
+					"\"${PODS_ROOT}/Headers/Public/GVRAudioSDK\"",
+					"\"${PODS_ROOT}/Headers/Public/GVRSDK\"",
+					"\"${PODS_ROOT}/Headers/Public/ViroReact\"",
+					"$(SRCROOT)/../node_modules/react-native/Libraries/LinkingIOS",
+				);
 				INFOPLIST_FILE = Augment3d/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (

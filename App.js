@@ -12,6 +12,7 @@ import {
   AppRegistry,
   Text,
   View,
+    Image,
   StyleSheet,
   PixelRatio,
   TouchableHighlight,
@@ -63,6 +64,9 @@ export default class ViroSample extends Component {
       this._moreButtonFunc = this._moreButtonFunc.bind(this);
       this._getMoreButton = this._getMoreButton.bind(this);
       this._moreTextStyle = this._moreTextStyle.bind(this);
+      this._openUrl = this._openUrl.bind(this);
+      
+      const privacyUrl = "https://omarperacha.com";
   }
 
   // Replace this function with the contents of _getVRNavigator() or _getARNavigator()
@@ -136,19 +140,25 @@ export default class ViroSample extends Component {
     return (
       <View style={localStyles.infoPage}>
             <TouchableHighlight style={localStyles.exitButton}
-            onPress={this._exitViro}
-            underlayColor={'#000000'}
-            onShowUnderlay={() => this.setState({infoSelected: true})}
-            onHideUnderlay={() => this.setState({infoSelected: false})}
-            >
-            
-            <Text style={this._infoTextStyle()}>{"<"}</Text>
+                onPress={this._exitViro}
+                underlayColor={'#000000'}
+                onShowUnderlay={() => this.setState({infoSelected: true})}
+                onHideUnderlay={() => this.setState({infoSelected: false})}
+                >
+                <Text style={this._infoTextStyle()}>{"<"}</Text>
             </TouchableHighlight>
             <Text style={localStyles.titleTextInfo}>About</Text>
             <Text style={localStyles.textBody}>{this.state.infoText1}
             </Text>
             <View style={localStyles.moreButtonSection}>
             {this._getMoreButton()}
+            </View>
+            <View style={localStyles.row}>
+            <Image
+            style={{marginTop: 40, marginRight: 20}}
+            source={require('./js/res/hand.png')}
+            onPress={this._openUrl}
+            />
             </View>
         </View>
     );
@@ -201,6 +211,14 @@ export default class ViroSample extends Component {
                       infoText1 : 'next'
                       })
     }
+    
+    _openUrl = () => {
+        Linking.canOpenURL(this.privacyUrl).then(supported => {
+                                                if (supported) {
+                                                Linking.openURL(this.privacyUrl);
+                                                }
+                                                });
+    }
 
 }
 
@@ -226,11 +244,19 @@ var localStyles = StyleSheet.create({
                                     flex : 1,
                                     flexDirection: 'column',
                                     backgroundColor: "black",
+                                    height: '100%',
                                     },
                                     moreButtonSection: {
                                     width : '100%',
                                     height: '25%',
                                     alignItems: 'center',
+                                    },
+                                    row: {
+                                    flex: 1,
+                                    alignItems: 'flex-end',
+                                    flexDirection: "column",
+                                    position:'absolute',
+                                    width: '100%'
                                     },
   titleText: {
     fontFamily: "Azonix",
