@@ -48,9 +48,11 @@ export default class ViroSample extends Component {
       sharedProps : sharedProps,
       selected: false,
       infoSelected: false,
-    infoText1: ''
-        
+    moreSelected: false,
+    infoText1: '',
+        showMore : true
     }
+      
     this._getExperienceSelector = this._getExperienceSelector.bind(this);
     this._getARNavigator = this._getARNavigator.bind(this);
     this._getVRNavigator = this._getVRNavigator.bind(this);
@@ -58,6 +60,9 @@ export default class ViroSample extends Component {
     this._exitViro = this._exitViro.bind(this);
     this._textStyle = this._textStyle.bind(this);
     this._infoTextStyle = this._infoTextStyle.bind(this);
+      this._moreButtonFunc = this._moreButtonFunc.bind(this);
+      this._getMoreButton = this._getMoreButton.bind(this);
+      this._moreTextStyle = this._moreTextStyle.bind(this);
   }
 
   // Replace this function with the contents of _getVRNavigator() or _getARNavigator()
@@ -113,6 +118,10 @@ export default class ViroSample extends Component {
   _infoTextStyle() {
         return this.state.infoSelected ? localStyles.buttonTextSelected : localStyles.buttonText;
     }
+    
+    _moreTextStyle() {
+        return this.state.moreSelected ? localStyles.buttonTextSelected : localStyles.buttonText;
+    }
 
   // Returns the ViroARSceneNavigator which will start the AR experience
   _getARNavigator() {
@@ -138,15 +147,9 @@ export default class ViroSample extends Component {
             <Text style={localStyles.titleTextInfo}>About</Text>
             <Text style={localStyles.textBody}>{this.state.infoText1}
             </Text>
-            <TouchableHighlight style={localStyles.exitButton}
-            onPress={this._exitViro}
-            underlayColor={'#000000'}
-            onShowUnderlay={() => this.setState({infoSelected: true})}
-            onHideUnderlay={() => this.setState({infoSelected: false})}
-            >
-            
-            <Text style={this._infoTextStyle()}>{">"}</Text>
-            </TouchableHighlight>
+            <View style={localStyles.moreButtonSection}>
+            {this._getMoreButton()}
+            </View>
         </View>
     );
   }
@@ -167,10 +170,37 @@ export default class ViroSample extends Component {
   _exitViro() {
     this.setState({
       navigatorType : UNSET,
+      showMore: true,
+      moreSelected: false,
       infoSelected: false,
       infoText1 : 'Augment3D is an interactive piece of music powered by\nAR\n\nPress START in the main menu to see virtual objects placed in the world around you\n\nExplore the objects and the sounds they make by moving towards them. Interact with the music by exploring different spaces near the objects and rotating your device screen'
     })
   }
+    
+    _getMoreButton() {
+        if (this.state.showMore) {
+        return (
+        <TouchableHighlight style={localStyles.moreButton}
+        onPress={this._moreButtonFunc}
+        underlayColor={'#000000'}
+        onShowUnderlay={() => this.setState({moreSelected: true})}
+        onHideUnderlay={() => this.setState({moreSelected: false})}
+        >
+        
+        <Text style={this._moreTextStyle()}>{"more"}</Text>
+        </TouchableHighlight>
+                );
+        } else {
+            return null;
+        }
+    }
+    
+    _moreButtonFunc() {
+        this.setState({
+                      showMore: false,
+                      infoText1 : 'next'
+                      })
+    }
 
 }
 
@@ -196,6 +226,11 @@ var localStyles = StyleSheet.create({
                                     flex : 1,
                                     flexDirection: 'column',
                                     backgroundColor: "black",
+                                    },
+                                    moreButtonSection: {
+                                    width : '100%',
+                                    height: '25%',
+                                    alignItems: 'center',
                                     },
   titleText: {
     fontFamily: "Azonix",
@@ -258,7 +293,19 @@ var localStyles = StyleSheet.create({
     borderRadius: 10,
     borderWidth: 1,
     borderColor: '#fff',
-  }
+  },
+                                    moreButton : {
+                                    height: 30,
+                                    width: 90,
+                                    paddingTop:5,
+                                    paddingBottom:5,
+                                    marginTop: 30,
+                                    marginBottom: 10,
+                                    backgroundColor:'#ffffff',
+                                    borderRadius: 10,
+                                    borderWidth: 1,
+                                    borderColor: '#fff',
+                                    }
 });
 
 module.exports = ViroSample
