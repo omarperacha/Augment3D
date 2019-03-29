@@ -626,7 +626,7 @@ class RoomPure: Room {
     let flow0 = Flow(room: self,
                      gens: [noise, mixer0, sampler],
                      FX: [[AKKorgLowPassFilter(cutoffFrequency: 30, resonance: 1.4, saturation: 1.1)],[AKCostelloReverb()],
-                          [AKCostelloReverb()]],
+                          [AKCostelloReverb(), AKPanner(pan: 0.7)]],
                      distThresh: self.distanceThresholds[0], pos: [-3, 0, 1])
     flows.append(flow0)
     
@@ -665,7 +665,7 @@ class RoomPure: Room {
     
     let vol = 0.5
     let vol2 = 0.3
-    let vol3 = 0.6
+    let vol3 = 0.75
     let distance = flow.calculateDist(pos: pos as! [Double])
     let distance1 = flows[1].calculateDist(pos: pos as! [Double])
     let distance2 = flows[2].calculateDist(pos: pos as! [Double])
