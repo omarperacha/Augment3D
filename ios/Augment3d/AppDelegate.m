@@ -8,7 +8,6 @@
  */
 
 #import "AppDelegate.h"
-#import "RCTLinkingManager.h"
 
 #import <ViroReact/VRTBundleURLProvider.h>
 #import <React/RCTBundleURLProvider.h>
@@ -48,11 +47,4 @@
   return YES;
 }
   
-- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url
-  sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
-  {
-    return [RCTLinkingManager application:application openURL:url
-                        sourceApplication:sourceApplication annotation:annotation];
-  }
-
 @end

@@ -1471,7 +1471,6 @@
 					"\"${PODS_ROOT}/Headers/Public/GVRAudioSDK\"",
 					"\"${PODS_ROOT}/Headers/Public/GVRSDK\"",
 					"\"${PODS_ROOT}/Headers/Public/ViroReact\"",
-					"$(SRCROOT)/../node_modules/react-native/Libraries/LinkingIOS",
 				);
 				INFOPLIST_FILE = Augment3d/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -1505,7 +1504,6 @@
 					"\"${PODS_ROOT}/Headers/Public/GVRAudioSDK\"",
 					"\"${PODS_ROOT}/Headers/Public/GVRSDK\"",
 					"\"${PODS_ROOT}/Headers/Public/ViroReact\"",
-					"$(SRCROOT)/../node_modules/react-native/Libraries/LinkingIOS",
 				);
 				INFOPLIST_FILE = Augment3d/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

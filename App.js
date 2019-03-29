@@ -155,11 +155,13 @@ export default class ViroSample extends Component {
             {this._getMoreButton()}
             </View>
             <View style={localStyles.row}>
+            <TouchableHighlight style={localStyles.privacyButton} onPress={this._openUrl}
+            underlayColor={'#000000'}>
             <Image
-            style={{marginTop: 40, marginRight: 20, width: 30, height: 30}}
+            style={{width: 30, height: 30}}
             source={handIm}
-            onPress={this._openUrl}
             />
+            </TouchableHighlight>
             </View>
         </View>
     );
@@ -213,10 +215,10 @@ export default class ViroSample extends Component {
                       })
     }
     
-    _openUrl = () => {
+    _openUrl() {
         Linking.canOpenURL(privacyUrl).then(supported => {
                                                 if (supported) {
-                                                Linking.openURL(this.privacyUrl);
+                                                Linking.openURL(privacyUrl);
                                                 }
                                                 });
     }
@@ -254,10 +256,11 @@ var localStyles = StyleSheet.create({
                                     },
                                     row: {
                                     flex: 1,
+                                    alignSelf : 'flex-end',
                                     alignItems: 'flex-end',
                                     flexDirection: "column",
                                     position:'absolute',
-                                    width: '100%'
+                                    width: '50%'
                                     },
   titleText: {
     fontFamily: "Azonix",
@@ -332,6 +335,19 @@ var localStyles = StyleSheet.create({
                                     borderRadius: 10,
                                     borderWidth: 1,
                                     borderColor: '#fff',
+                                    },
+                                    privacyButton : {
+                                    height: 30,
+                                    width: 30,
+                                    paddingTop:0,
+                                    paddingBottom:0,
+                                    marginTop: 40,
+                                    marginRight: 20,
+                                    alignItems: 'center',
+                                    backgroundColor:'#000000',
+                                    borderRadius: 10,
+                                    borderWidth: 1,
+                                    borderColor: '#000000',
                                     }
 });
 
