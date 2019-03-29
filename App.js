@@ -10,6 +10,7 @@
 import React, { Component } from 'react';
 import {
   AppRegistry,
+    Linking,
   Text,
   View,
     Image,
@@ -39,6 +40,8 @@ var AR_NAVIGATOR_TYPE = "AR";
 // This determines which type of experience to launch in, or UNSET, if the user should
 // be presented with a choice of AR or VR. By default, we offer the user a choice.
 var defaultNavigatorType = UNSET;
+const privacyUrl = 'https://omarperacha.com';
+const handIm = require('./js/res/hand.png')
 
 export default class ViroSample extends Component {
   constructor() {
@@ -65,8 +68,6 @@ export default class ViroSample extends Component {
       this._getMoreButton = this._getMoreButton.bind(this);
       this._moreTextStyle = this._moreTextStyle.bind(this);
       this._openUrl = this._openUrl.bind(this);
-      
-      const privacyUrl = "https://omarperacha.com";
   }
 
   // Replace this function with the contents of _getVRNavigator() or _getARNavigator()
@@ -155,8 +156,8 @@ export default class ViroSample extends Component {
             </View>
             <View style={localStyles.row}>
             <Image
-            style={{marginTop: 40, marginRight: 20}}
-            source={require('./js/res/hand.png')}
+            style={{marginTop: 40, marginRight: 20, width: 30, height: 30}}
+            source={handIm}
             onPress={this._openUrl}
             />
             </View>
@@ -213,7 +214,7 @@ export default class ViroSample extends Component {
     }
     
     _openUrl = () => {
-        Linking.canOpenURL(this.privacyUrl).then(supported => {
+        Linking.canOpenURL(privacyUrl).then(supported => {
                                                 if (supported) {
                                                 Linking.openURL(this.privacyUrl);
                                                 }
