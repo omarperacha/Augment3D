@@ -40,7 +40,7 @@ var AR_NAVIGATOR_TYPE = "AR";
 // This determines which type of experience to launch in, or UNSET, if the user should
 // be presented with a choice of AR or VR. By default, we offer the user a choice.
 var defaultNavigatorType = UNSET;
-const privacyUrl = 'https://omarperacha.com';
+const privacyUrl = 'https://omarperacha.com/mini-chamber-terms-of-use';
 const handIm = require('./js/res/hand.png')
 
 export default class ViroSample extends Component {
@@ -211,7 +211,7 @@ export default class ViroSample extends Component {
     _moreButtonFunc() {
         this.setState({
                       showMore: false,
-                      infoText1 : 'next'
+                      infoText1 : 'WHITE OBJECTS TELEPORT\n\nIn a small space? No problem. Just tap any in-focus white object to shift the entire virtual world, bringing it right to you\n\nBLACK OBJECTS REACT\n\nTap on an in-focus black object to play its sounds\n\nAR REQUIRES LIGHT\n\nEnsure your environment is well lit for augmented reality to function smoothly'
                       })
     }
     
