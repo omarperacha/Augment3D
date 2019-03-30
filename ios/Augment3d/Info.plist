@@ -21,7 +21,7 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>2</string>
+	<string>3</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>
@@ -39,6 +39,14 @@
 	</dict>
 	<key>NSCameraUsageDescription</key>
 	<string>Camera required for Augmented Reality</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>App does not use location info</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>App does not use location info</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>App does not use microphone</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>App does not use photo library</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Azonix.otf</string>
